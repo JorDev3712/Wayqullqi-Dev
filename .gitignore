@@ -1,0 +1,6 @@
+Wayqullqi-API/node_modules/*
+Wayqullqi-DiscordBot/node_modules/*
+Wayqullqi-API/generated/prisma/*
+Wayqullqi-API/prisma/*
+Wayqullqi-API/.env
+Wayqullqi-DiscordBot/.env
