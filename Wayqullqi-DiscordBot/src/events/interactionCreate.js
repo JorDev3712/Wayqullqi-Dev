@@ -1,5 +1,7 @@
 const { MessageFlags } = require('discord.js');
 
+const viteLog = require('../utils/logger').createContext('OnInteractionCreate');
+
 module.exports = {
   name: "interactionCreate",
   async execute(interaction, client) {
@@ -9,7 +11,7 @@ module.exports = {
     if (interaction.isCommand()){
       const command = client.commands.get(interaction.commandName);
       if (!command) {
-        client.viteLog.error("[OnInteractionCreate] Command id={0} no encontrado", interaction.commandName,);
+        viteLog.error("Command id={0} no encontrado", interaction.commandName,);
         await interaction.reply({
           content: "❌ Hubo un error ejecutando este botón 404.",
           flags: MessageFlags.Ephemeral
@@ -20,7 +22,7 @@ module.exports = {
       try {
         await command.execute(interaction);
       } catch (error) {
-        client.viteLog.error("[OnInteractionCreate] Command id={0} => {1}", interaction.commandName, error);
+        viteLog.error("Command id={0} => {1}", interaction.commandName, error);
         await interaction.reply({
           content: "❌ Hubo un error ejecutando este comando.",
           flags: MessageFlags.Ephemeral
@@ -32,7 +34,7 @@ module.exports = {
     if (interaction.isButton()){
       const button = client.buttons.get(interaction.customId);
       if (!button) {
-        client.viteLog.error("[OnInteractionCreate] Button id={0} no encontrado.", interaction.customId);
+        viteLog.error("Button id={0} no encontrado.", interaction.customId);
         await interaction.reply({
           content: "❌ Hubo un error ejecutando este botón 404.",
           flags: MessageFlags.Ephemeral
@@ -41,9 +43,9 @@ module.exports = {
       }
 
       try{
-        await button.execute(interaction, client);
+        await button.execute(interaction);
       } catch(error){
-        client.viteLog.error("[OnInteractionCreate] Button id={0} => {1}", interaction.customId, error);
+        viteLog.error("Button id={0} => {1}", interaction.customId, error);
         await interaction.reply({
           content: "❌ Hubo un error ejecutando este botón.",
           flags: MessageFlags.Ephemeral

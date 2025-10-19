@@ -1,29 +1,17 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+
+// ui
+const homeMenu = require('../components/ui/homeMenu');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('help')
-    .setDescription('Display the help menu'),
+    .setDescription('Display the principal menu'),
 
   async execute(interaction) {
-    const builder1 = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId('onProfileButtonClick')
-        .setLabel('💸 Empezar')
-        .setStyle(ButtonStyle.Success),
-      new ButtonBuilder()
-        .setCustomId('onTermsButtonClick')
-        .setLabel('⚖️ Terminos y condiciones')
-        .setStyle(ButtonStyle.Primary),
-      new ButtonBuilder()
-        .setCustomId('onPolicyButtonClick')
-        .setLabel('⚔️ Politica')
-        .setStyle(ButtonStyle.Secondary)
-    );
-
     await interaction.reply({
       content: '📊 **Guide**',
-      components: [builder1],
+      components: [homeMenu],
       flags: MessageFlags.Ephemeral
     });
   },

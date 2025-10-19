@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Local imports
-const logger = require('./utils/logger');
+const logger = require('./utils/logger').createContext('APP');
 const loaderButtons = require('./components')
 
 // Inicializa el cliente

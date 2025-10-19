@@ -4,6 +4,10 @@ const chalk = require("chalk");
 
 const logsDir = path.join(__dirname, '../logs');
 
+const date = new Date();
+const fileName = `${date.toISOString().split('T')[0]}.log`; // Ej: 2025-10-05.log
+const filePath = path.join(logsDir, fileName);
+
 const DEBUG_MODE = ["true", "1", "yes"].includes(process.env.DEBUG_MODE?.toLowerCase());
 
 // Asegurar que exista la carpeta logs
@@ -29,10 +33,6 @@ function getTimestamp() {
 
 // 🧾 Escribe logs en archivo por fecha
 function writeToFile(level, message) {
-  const date = new Date();
-  const fileName = `${date.toISOString().split('T')[0]}.log`; // Ej: 2025-10-05.log
-  const filePath = path.join(logsDir, fileName);
-
   const logLine = `[${level}] (${getTimestamp()}) ${message}\n`;
   fs.appendFile(filePath, logLine, err => {
     if (err) console.error('❌ Error escribiendo log:', err);
@@ -40,36 +40,46 @@ function writeToFile(level, message) {
 }
 
 // 🎨 Definición del logger
-const logger = {
+class Logger {
+  constructor(name){
+    this.contextName = name;
+  }
+
   information(message, ...objs) {
     const msg = formatMessage(message, ...objs);
-    console.log(chalk.cyan(`[INFO] (${getTimestamp()})`), msg);
-    writeToFile('INFO', msg);
-  },
+    console.log(chalk.cyan(`[INFO:${this.contextName}] (${getTimestamp()})`), msg);
+    writeToFile(`INFO:${this.contextName}`, msg);
+  }
+
+  log(message, ...objs){
+    const msg = formatMessage(message, ...objs);
+    console.log(chalk.gray(`${msg}`));
+    writeToFile(`LOG:${this.contextName}`, msg);
+  }
 
   debug(message, ...objs) {
     if (DEBUG_MODE){
         const msg = formatMessage(message, ...objs);
-        console.log(chalk.gray(`[DEBUG] (${getTimestamp()})`), msg);
-        writeToFile('DEBUG', msg);
+        console.log(chalk.gray(`[DEBUG:${this.contextName}] (${getTimestamp()})`), msg);
+        writeToFile(`DEBUG:${this.contextName}`, msg);
     }
-  },
+  }
 
   warning(message, ...objs) {
     const msg = formatMessage(message, ...objs);
-    console.log(chalk.yellow(`[WARN] (${getTimestamp()})`), msg);
-    writeToFile('WARN', msg);
-  },
+    console.log(chalk.yellow(`[WARN:${this.contextName}] (${getTimestamp()})`), msg);
+    writeToFile(`WARN:${this.contextName}`, msg);
+  }
 
   error(message, ...objs) {
     const msg = formatMessage(message, ...objs);
-    console.log(chalk.red(`[ERROR] (${getTimestamp()})`), msg);
-    writeToFile('ERROR', msg);
-  },
+    console.log(chalk.red(`[ERROR:${this.contextName}] (${getTimestamp()})`), msg);
+    writeToFile(`ERROR:${this.contextName}`, msg);
+  }
+
+  createContext(ctx_name){
+    return new Logger(ctx_name);
+  }
 };
 
-if (DEBUG_MODE){
-    logger.information('Debug mode running!')   
-}
-
-module.exports = logger;
+module.exports = new Logger('root');
