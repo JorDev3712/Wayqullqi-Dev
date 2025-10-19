@@ -2,13 +2,13 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Messa
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('help')
-    .setDescription('Display the help menu'),
+    .setName('start')
+    .setDescription('Display the main menu'),
 
   async execute(interaction) {
     const builder1 = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
-        .setCustomId('onProfileButtonClick')
+        .setCustomId('onStartedButtonClick')
         .setLabel('💸 Empezar')
         .setStyle(ButtonStyle.Success),
       new ButtonBuilder()

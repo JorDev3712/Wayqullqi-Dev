@@ -8,17 +8,25 @@ module.exports = {
 
     if (interaction.isCommand()){
       const command = client.commands.get(interaction.commandName);
-      if (!command) return;
+      if (!command) {
+        client.viteLog.error("[OnInteractionCreate] Command id={0} no encontrado", interaction.commandName,);
+        await interaction.reply({
+          content: "❌ Hubo un error ejecutando este botón 404.",
+          flags: MessageFlags.Ephemeral
+        });
+        return;
+      }
 
       try {
         await command.execute(interaction);
       } catch (error) {
-        client.viteLog.error("[OnInteractionCreate] Command id={0} => {1}", interaction.customId, error);
+        client.viteLog.error("[OnInteractionCreate] Command id={0} => {1}", interaction.commandName, error);
         await interaction.reply({
           content: "❌ Hubo un error ejecutando este comando.",
           flags: MessageFlags.Ephemeral
         });
       }
+      return;
     }
 
     if (interaction.isButton()){

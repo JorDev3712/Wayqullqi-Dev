@@ -1,6 +1,8 @@
+const AuthController = require('../../controllers/authController');
+
 module.exports = {
     customId: 'onProfileButtonClick',
     async execute(interaction) {
-        await interaction.reply('📂 Aquí van tus gestiones (simulando llamada a la API)');
+        const resultCode = await AuthController.checkUser(interaction);
     },
 };
