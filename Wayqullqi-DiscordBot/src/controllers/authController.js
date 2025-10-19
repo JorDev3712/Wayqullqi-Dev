@@ -7,15 +7,15 @@ async function checkUser(interaction){
         const userDc = interaction.user;
         // username, globalName, avatar, id, banner, accentColor
 
-        const { status, message, user } = await AuthService.getUserByDiscordId(userDc.id);
+        const { code, message, user } = await AuthService.getUserByDiscordId(userDc.id);
         if (!user){
             await interaction.reply({
                 content: 'Iniciando la creación de cuenta y perfil...',
                 flags: MessageFlags.Ephemeral
             });
 
-            const { status, message, user } = await AuthService.createUserByDiscord(userDc.id, userDc.username);
-            if (status != 200){
+            const { code, message, user } = await AuthService.createUserByDiscord(userDc.id, userDc.username);
+            if (code != 200){
                 await interaction.reply({
                     content: 'Ocurrió un error al crear la cuenta...',
                     flags: MessageFlags.Ephemeral

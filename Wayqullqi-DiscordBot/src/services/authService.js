@@ -4,10 +4,11 @@ async function getUserByDiscordId(id){
     console.log(`[AuthService] Invoked method getUserByDiscordId(${id})`);
     try{
         const request = await api.get(`/user/discord/${id}`);
-        return { code: request.status, message: request.statusMessage, data: request.data };
+        console.log(request.data)
+        return { code: request.status, message: request.statusMessage, user: request.data };
     } catch(error){
         console.log(`[AuthService] ${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
-        return { code: error.status, message: error.request.res.statusMessage, data: null };
+        return { code: error.status, message: error.request.res.statusMessage, user: null };
     }
 }
 

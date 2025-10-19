@@ -15,6 +15,21 @@ app.use(cors({
 
 app.use(express.json());
 
+// Esto hace que todos los BigInt de todas tus respuestas se serialicen automáticamente sin tocar el resto del código.
+app.use((req, res, next) => {
+  const originalJson = res.json;
+  res.json = function (data) {
+    const serialized = JSON.parse(
+      JSON.stringify(
+        data,
+        (_, value) => (typeof value === "bigint" ? value.toString() : value)
+      )
+    );
+    return originalJson.call(this, serialized);
+  };
+  next();
+});
+
 // Rutas
 app.use("/api/wayqullqi/user", userRoutes);
 
