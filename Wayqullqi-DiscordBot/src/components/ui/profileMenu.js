@@ -8,7 +8,7 @@ module.exports = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId('onProfileClick')
         .setLabel('🖥️ Perfil')
-        .setStyle(ButtonStyle.Secondary),
+        .setStyle(ButtonStyle.Success),
       new ButtonBuilder()
         .setCustomId('onDeleteAccountButtonClick')
         .setLabel('❌ Eliminar cuenta')
