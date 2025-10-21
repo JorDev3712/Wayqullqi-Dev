@@ -1,5 +1,6 @@
-const AuthService = require('../services/authService');
 const { MessageFlags } = require('discord.js');
+
+const AuthService = require('../services/authService');
 
 const viteLog = require('../utils/logger').createContext('AuthController');
 

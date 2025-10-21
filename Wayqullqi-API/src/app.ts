@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
 
-// import expenseRoutes from "./presentation/routes/expense.routes";
+// Middlewars imports
+import { TokenValidationMiddleware } from "./middlewares/auth.middleware";
 
+// Routes imports
 import userRoutes from "./presentation/routes/user.routes";
+import userCardRoutes from "./presentation/routes/user.card.routes";
 
 const app = express();
 
@@ -14,6 +17,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+// Middlewares globales
+app.use(TokenValidationMiddleware);
 
 // Esto hace que todos los BigInt de todas tus respuestas se serialicen automáticamente sin tocar el resto del código.
 app.use((req, res, next) => {
@@ -32,5 +37,6 @@ app.use((req, res, next) => {
 
 // Rutas
 app.use("/api/wayqullqi/user", userRoutes);
+app.use("/api/wayqullqi/card", userCardRoutes);
 
 export default app;

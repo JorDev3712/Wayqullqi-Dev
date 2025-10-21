@@ -40,18 +40,4 @@ export class UserService {
             }
         })
     }
-
-    public async createCard(userId: string){
-        return await db.user_Card.create({
-            data: {
-                user_id: userId,
-                description: "default",
-                balance: 200,
-                max_amount: 300,
-                notice_day: 8,
-                notice_hour: 1,
-                enable_notice: true
-            }
-        })
-    }
 }

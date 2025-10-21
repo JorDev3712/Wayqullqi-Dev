@@ -43,6 +43,7 @@ module.exports = {
       }
 
       try{
+        console.log(button);
         await button.execute(interaction);
       } catch(error){
         viteLog.error("Button id={0} => {1}", interaction.customId, error);
