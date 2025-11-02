@@ -32,19 +32,35 @@ module.exports = {
     }
 
     if (interaction.isButton()){
-      const button = client.buttons.get(interaction.customId);
+      let args = [];
+
+      let button = client.buttons.get(interaction.customId);
       if (!button) {
-        viteLog.error("Button id={0} no encontrado.", interaction.customId);
-        await interaction.reply({
-          content: "❌ Hubo un error ejecutando este botón 404.",
-          flags: MessageFlags.Ephemeral
-        });
-        return;
+        if (interaction.customId.includes(':')){
+          args = interaction.customId.split(':');
+          button = client.buttons.get(args[0]);
+          if (!button){
+            viteLog.error("Button id={0} no encontrado. #1", args[0]);
+            await interaction.reply({
+              content: "❌ Hubo un error ejecutando este botón 404.",
+              flags: MessageFlags.Ephemeral
+            });
+            return;
+          }
+          // Elimina el primer elemento de args
+          args.splice(0, 1);
+        } else {
+          viteLog.error("Button id={0} no encontrado. #2", interaction.customId);
+          await interaction.reply({
+            content: "❌ Hubo un error ejecutando este botón 404.",
+            flags: MessageFlags.Ephemeral
+          });
+          return;
+        }
       }
 
       try{
-        console.log(button);
-        await button.execute(interaction);
+        await button.execute(interaction, args);
       } catch(error){
         viteLog.error("Button id={0} => {1}", interaction.customId, error);
         await interaction.reply({

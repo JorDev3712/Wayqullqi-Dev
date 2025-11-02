@@ -13,6 +13,19 @@ async function getCards(userId){
     }
 }
 
+async function getCardOne(cardId, userId){
+    viteLog.debug(`Invoked method getCardOne(${cardId}, ${userId})`);
+    try{
+        const request = await api.get(`/card/user/${userId}/${cardId}`);
+        viteLog.log('{0}', request.data);
+        return { code: request.status, message: request.statusMessage, card: request.data };
+    } catch(error){
+        viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
+        return { code: error.status, message: error.request.res.statusMessage, card: null };
+    }
+}
+
 module.exports = {
     getCards,
+    getCardOne,
 };

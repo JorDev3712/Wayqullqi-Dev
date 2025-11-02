@@ -15,7 +15,8 @@ module.exports = {
             buttons.push(
               new ButtonBuilder()
                 .setCustomId(`OnCardClick:${card.id}:${card.user_id}`)
-                .setLabel(`${card.description} #${i + 1} 💳`)
+                .setLabel(`${card.description} #${i + 1} 🎫`)
+                // .setEmoji('​🎫')
                 .setStyle(ButtonStyle.Secondary)
             );
           }
