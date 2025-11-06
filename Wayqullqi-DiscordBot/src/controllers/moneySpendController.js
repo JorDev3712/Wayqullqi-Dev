@@ -76,7 +76,7 @@ async function addSpend(interaction, cardId, userId, name, amount){
 
         const response = await MoneySpentService.postCreate(cardId, userId, name, amount);
         if (!response.spend){
-            viteLog.debug('Ocurrió un error al procesar los datos con el servidor en la cuenta {0}.', userId);
+            viteLog.debug('Ocurrió un error al procesar los datos con el servidor en la cuenta - Server code: {1}.', userId, response.code);
             await interaction.editReply({
                 content: 'Ocurrió un error al procesar los datos con el servidor.',
                 flags: MessageFlags.Ephemeral

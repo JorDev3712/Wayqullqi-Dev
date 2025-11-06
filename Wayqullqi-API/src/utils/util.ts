@@ -12,5 +12,5 @@ export function checkOnlyLetters(value: string, length: number): boolean {
 
 export function checkOnlyNumber(value: any, length: number): boolean {
   const regex = /^[0-9]+(\.[0-9]+)?$/;
-  return regex.test(value) && value.length <= length;
+  return regex.test(value.toString()) && value.toString().length <= length;
 }
