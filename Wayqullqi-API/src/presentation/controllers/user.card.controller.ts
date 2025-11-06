@@ -6,7 +6,7 @@ export class UserCardController {
     constructor(private readonly userCardService: UserCardService) { }
 
     public async getAll(req: Request, res: Response) {
-        console.log('[UserCardController] invoke method getAll()');
+        console.log('[UserCardController] getAll() method invoked');
         try{
             const { userId } = req.params;
             if (!uuidValidate(userId)){
@@ -29,7 +29,7 @@ export class UserCardController {
     }
 
     public async getById(req: Request, res: Response) {
-        console.log('[UserCardController] invoke method getById()');
+        console.log('[UserCardController] getById() method invoked');
         try{
             const { id } = req.params;
             if (!uuidValidate(id)){
@@ -52,7 +52,7 @@ export class UserCardController {
     }
 
     public async getByUserWithId(req: Request, res: Response) {
-        console.log('[UserCardController] invoke method getByUserWithId()');
+        console.log('[UserCardController] getByUserWithId() method invoked');
         try{
             const { userId, id } = req.params;
             if (!uuidValidate(id) || !uuidValidate(userId)){
@@ -75,7 +75,7 @@ export class UserCardController {
     }
 
     public async create(req: Request, res: Response) {
-        console.log('[UserCardController] invoke method create()');
+        console.log('[UserCardController] create() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
@@ -87,15 +87,15 @@ export class UserCardController {
 
             const card = await this.userCardService.create(userId, uuidv4(), description, balance, maxAmount, noticeDay, noticeHour, enable);
             if (!card){
-                console.log('[UserCardController] The card creation was not possible.');
-                return res.status(404).json({ message: "The card creation was not possible." });
+                console.log('[UserCardController] The creation of the card was not possible.');
+                return res.status(404).json({ message: "The creation of the card was not possible." });
             }
 
             console.log('[UserCardController] Done');
             return res.status(200).json(card);
         } catch (error){
             console.error(error);
-            return res.status(500).json({message: "Server error @Users->creation"});
+            return res.status(500).json({message: "Server error @Card->creation"});
         }
     }
 }

@@ -6,7 +6,7 @@ const WayVirtualService = require("../services/wayVirtualService");
 const viteLog = require('../utils/logger').createContext('WayVirtualController');
 
 async function checkCards(interaction){
-    viteLog.debug('Invoked method checkCards()');
+    viteLog.debug('checkCards() method invoked');
     try{
         const userDc = interaction.user;
         await interaction.reply({
@@ -48,7 +48,7 @@ async function checkCards(interaction){
 }
 
 async function checkCardOne(interaction, cardId, userId){
-    viteLog.debug('Invoked method checkCardOne()');
+    viteLog.debug('checkCardOne() method invoked');
     try{
         await interaction.reply({
             content: 'Obteniendo datos del servidor...',
@@ -57,7 +57,7 @@ async function checkCardOne(interaction, cardId, userId){
 
         const response = await WayVirtualService.getCardOne(cardId, userId);
         if (!response.card){
-            viteLog.debug('Ocurrió un error al verificar los datos de la card en la cuenta {0}.', userId);
+            viteLog.debug('Ocurrió un error al verificar los datos de la card en la cuenta {0} - Server code: {1}.', userId, response.code);
             await interaction.editReply({
                 content: 'Ocurrió un error obtener los datos de tu Virtual Card.',
                 flags: MessageFlags.Ephemeral

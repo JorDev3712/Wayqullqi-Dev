@@ -7,6 +7,7 @@ import { TokenValidationMiddleware } from "./middlewares/auth.middleware";
 // Routes imports
 import userRoutes from "./presentation/routes/user.routes";
 import userCardRoutes from "./presentation/routes/user.card.routes";
+import userSpendingRoutes from "./presentation/routes/user.card.spending.routes";
 
 const app = express();
 
@@ -38,5 +39,6 @@ app.use((req, res, next) => {
 // Rutas
 app.use("/api/wayqullqi/user", userRoutes);
 app.use("/api/wayqullqi/card", userCardRoutes);
+app.use("/api/wayqullqi/card/spend", userSpendingRoutes);
 
 export default app;

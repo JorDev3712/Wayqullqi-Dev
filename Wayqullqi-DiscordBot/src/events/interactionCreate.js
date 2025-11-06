@@ -8,6 +8,45 @@ module.exports = {
 
     // if (!interaction.isChatInputCommand()) return;
 
+    if (interaction.isModalSubmit()){
+      let args = [];
+
+      let modal = client.modals.get(interaction.customId);
+      if (!modal) {
+        if (interaction.customId.includes(':')){
+          args = interaction.customId.split(':');
+          modal = client.modals.get(args[0]);
+          if (!modal){
+            viteLog.error("Modal id={0} no encontrado. #1", args[0]);
+            await interaction.reply({
+              content: "❌ Hubo un error al procesar el formulario 404.",
+              flags: MessageFlags.Ephemeral
+            });
+            return;
+          }
+          // Elimina el primer elemento de args
+          args.splice(0, 1);
+        } else {
+          viteLog.error("Modal id={0} no encontrado. #2", interaction.customId);
+          await interaction.reply({
+            content: "❌ Hubo un error al procesar el formulario 404.",
+            flags: MessageFlags.Ephemeral
+          });
+          return;
+        }
+      }
+
+      try{
+        await modal.execute(interaction, args);
+      } catch(error){
+        viteLog.error("Modal id={0} => {1}", interaction.customId, error);
+        await interaction.reply({
+          content: "❌ Hubo un error al procesar el formulario.",
+          flags: MessageFlags.Ephemeral
+        });
+      }
+    }
+
     if (interaction.isCommand()){
       const command = client.commands.get(interaction.commandName);
       if (!command) {

@@ -1,5 +1,7 @@
 const { MessageFlags, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
+const { safeValueToString } = require('../../utils/util');
+
 const WayVirtualController = require('../../controllers/wayVirtualController');
 
 module.exports = {
@@ -61,14 +63,14 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(0xf1c40f)
-                .setTitle(`Card: ${card.description}`)
+                .setTitle(`Virtual Card: ${card.description}`)
                 .setDescription('Detalle de su Virtual Card')
                 .addFields(
-                    { name: 'Límite Gasto', value: String(card.balance), inline: true },
-                    { name: 'Máximo Gasto', value: String(card.max_amount), inline: true },
-                    { name: 'Notificaciones por día', value: String(card.notice_day), inline: true },
-                    { name: 'Notificaciones por hora', value: String(card.notice_hour), inline: true },
-                    { name: 'Permitir envio de notificación', value: String(card.enable_notice), inline: true },
+                    { name: 'Gasto mínimo', value: safeValueToString(card.balance), inline: true },
+                    { name: 'Gasto máximo', value: safeValueToString(card.max_amount), inline: true },
+                    { name: 'Notificaciones por día', value: safeValueToString(card.notice_day), inline: false },
+                    { name: 'Notificaciones por hora', value: safeValueToString(card.notice_hour), inline: true },
+                    { name: 'Permitir envio de notificación', value: safeValueToString(card.enable_notice), inline: true },
                     // {
                     //   name: '📅 Fecha de creación',
                     //   value: `<t:${Math.floor(card.createdAt / 1000)}:F>`,

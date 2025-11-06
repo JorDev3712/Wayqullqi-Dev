@@ -15,6 +15,7 @@ const client = new Client({
 // Adds local logger to Client
 client.viteLog = logger;
 
+// Load buttons and modals
 loaderButtons(client);
 
 // Colección para comandos
