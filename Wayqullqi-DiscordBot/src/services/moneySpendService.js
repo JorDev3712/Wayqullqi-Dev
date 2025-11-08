@@ -16,6 +16,22 @@ async function getSpendings(cardId, userId){
     }
 }
 
+async function getDailySpending(dto){
+    viteLog.debug(`getDailySpending(${dto.body.cardId}, ${dto.userId}) method invoked`);
+    try{
+        const request = await api.post(`/card/spend/daily/${dto.userId}`, dto.body);
+        viteLog.log('{0}', request.data);
+        return { code: request.status, message: request.statusMessage, spends: request.data };
+    } catch(error){
+        if (error.request.res == undefined){
+            viteLog.error(`Service Unavailable { code: 503 }`);
+            return { code: 503, message: 'Service Unavailable', spends: null };
+        }
+        viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
+        return { code: error.status, message: error.request.res.statusMessage, spends: null };
+    }
+}
+
 async function postCreate(cardId, userId, name, amount){
     viteLog.debug(`postCreate(${cardId}, ${userId}) method invoked`);
     try{
@@ -39,5 +55,6 @@ async function postCreate(cardId, userId, name, amount){
 
 module.exports = {
     getSpendings,
+    getDailySpending,
     postCreate,
 };

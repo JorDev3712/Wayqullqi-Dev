@@ -5,7 +5,7 @@ const { checkOnlyLetters, checkOnlyNumber } = require('../../utils/util');
 const SpendController = require('../../controllers/moneySpendController');
 
 module.exports = {
-    customId: 'OnSpendFormConfirm',
+    customId: 'OnSpendFormSubmit',
     async execute(interaction, args) {
         const form = interaction.fields;
         const description = form.getTextInputValue('SpendNameInput');
@@ -31,7 +31,7 @@ module.exports = {
         switch (resultCode) {
             case 0:
                 await interaction.editReply({
-                    content: '✅ Se ha registrado el gasto correctamente.',
+                    content: `✅ Se ha registrado el gasto correctamente.\n💰 Monto: ${spend.amount}`,
                     flags: MessageFlags.Ephemeral
                 });
                 break;

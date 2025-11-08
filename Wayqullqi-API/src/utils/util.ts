@@ -14,3 +14,8 @@ export function checkOnlyNumber(value: any, length: number): boolean {
   const regex = /^[0-9]+(\.[0-9]+)?$/;
   return regex.test(value.toString()) && value.toString().length <= length;
 }
+
+export function checkNumber(value: any, length: number): boolean {
+  const regex = /^[0-9]+$/;
+  return regex.test(value.toString()) && value.toString().length <= length;
+}

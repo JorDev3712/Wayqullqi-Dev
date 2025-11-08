@@ -48,6 +48,57 @@ async function checkSpendings(interaction, cardId, userId){
     }
 }
 
+async function checkDailySpendings(interaction, cardId, userId, year, month, day){
+    viteLog.debug('checkDailySpendings() method invoked');
+    try{
+        const userDc = interaction.user;
+        await interaction.reply({
+            content: 'Verificando movimientos...',
+            flags: MessageFlags.Ephemeral
+        });
+
+        const checkUser = await AuthService.getUser(userId);
+        if (!checkUser.user){
+            viteLog.debug('Usuario con id {0} no se encuentra registrado.', userDc.id);
+            await interaction.editReply({
+                content: 'No se verificó una cuenta creada, es necesario ingresar por el comando /start.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [2, []];
+        }
+
+        const response = await MoneySpentService.getDailySpending({
+            userId,
+            body: {
+                cardId,
+                year,
+                month,
+                day
+            },
+        });
+
+        if (response.spends == null){
+            viteLog.debug('Ocurrió un error al verificar los movimientos de la cuenta {0}.', userId);
+            await interaction.editReply({
+                content: 'Ocurrió un error al verificar los gatos diarios.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [3, []];
+        }
+
+        viteLog.debug('Done');
+        return [0, response.spends];
+
+    } catch (error){
+        console.log(error);
+        await interaction.editReply({
+            content: '❌ No pude verificar tus gatos en este momento.',
+            flags: MessageFlags.Ephemeral
+        });
+        return [1, []];
+    }
+}
+
 async function checkCardOne(cardId, userId){
     viteLog.debug('checkCardOne() method invoked');
     try{
@@ -99,6 +150,7 @@ async function addSpend(interaction, cardId, userId, name, amount){
 
 module.exports = {
     checkSpendings,
+    checkDailySpendings,
     checkCardOne,
     addSpend,
 };
