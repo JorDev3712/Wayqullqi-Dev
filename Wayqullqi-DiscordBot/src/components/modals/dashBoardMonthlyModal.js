@@ -1,16 +1,15 @@
 const { MessageFlags, EmbedBuilder } = require('discord.js');
 
-const { buildTable, checkNumber, createDateString } = require('../../utils/util');
+const { buildTable, checkNumber, getMonthDateString } = require('../../utils/util');
 
 const SpendController = require('../../controllers/moneySpendController');
 
 module.exports = {
-    customId: 'OnDashboardDailySubmit',
+    customId: 'OnDashboardMonthlySubmit',
     async execute(interaction, args) {
         const form = interaction.fields;
         const yearInput = form.getTextInputValue('DashboardYearInput');
         const monthInput = form.getTextInputValue('DashboardMonthInput');
-        const dayInput = form.getTextInputValue('DashboardDayInput');
 
         if (!checkNumber(yearInput, 4)){
             await interaction.reply({
@@ -46,28 +45,11 @@ module.exports = {
             return;
         }
 
-        if (!checkNumber(dayInput, 2)){
-            await interaction.reply({
-                content: 'En el monto solo se permiten números y hasta 4 digitos.',
-                flags: MessageFlags.Ephemeral
-            });
-            return;
-        }
-
-        const day = Number(dayInput);
-        if (day < 1 || day > 31) {
-            await interaction.reply({
-                content: 'Por favor, escribe un número de día válido.',
-                flags: MessageFlags.Ephemeral
-            });
-            return;
-        }
-
-        const [resulCode, spends] = await SpendController.checkDailySpendings(interaction, args[0], args[1], year, month, day);
+        const [resulCode, spends] = await SpendController.checkMonthlySpendings(interaction, args[0], args[1], year, month);
         if (resulCode == 0){
             if (spends.length < 1){
                 await interaction.editReply({
-                    content: `🤖 No hay movimientos registrados el ${createDateString('es-PE', year, month, day)}.`,
+                    content: `🤖 No hay movimientos registrados en ${getMonthDateString('es-PE', year, month, 1)}.`,
                     flags: MessageFlags.Ephemeral
                 });
                 return;
@@ -75,14 +57,14 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(0xf1c40f)
-                .setTitle('📅​ Detalle Diario')
+                .setTitle('🗓️​ Detalle Mensual')
 
             let total = 0;
             for (const spend of spends) {
                 total = total + Number(spend.amount);
             }
 
-            embed.setDescription(buildTable(['Descripción', 'Monto'], spends.map(x => [x.name, Number(x.amount)])));
+            embed.setDescription(buildTable(['Descripción', 'Monto', 'Fecha'], spends.map(x => [x.name, Number(x.amount), new Date(x.createdAt).toDateString()])));
 
             embed.setFooter({
                 text: `Total Gastado: S/${total}`,
@@ -90,7 +72,7 @@ module.exports = {
             });
 
             await interaction.editReply({
-                content: `🤖 Estos son tus movimientos del ${createDateString('es-PE', year, month, day)}`,
+                content: `🤖 Estos fueron tus movimientos en ${getMonthDateString('es-PE', year, month, 1)}.`,
                 embeds: [embed],
                 flags: MessageFlags.Ephemeral
             });

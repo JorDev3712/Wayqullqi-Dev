@@ -9,6 +9,8 @@ const controller = new UserCardSpendingController(service);
 
 router.get("/all/:userId/:cardId", controller.getAll.bind(controller));
 router.post("/daily/:userId", controller.getDaily.bind(controller));
+router.post("/weekly/:userId", controller.getWeekly.bind(controller));
+router.post("/monthly/:userId", controller.getMonthly.bind(controller));
 router.post("/create/:userId", controller.create.bind(controller));
 
 export default router;

@@ -19,7 +19,7 @@ module.exports = {
             .setMaxLength(21)
             .setRequired(true);
 
-        const monto = new TextInputBuilder()
+        const amount = new TextInputBuilder()
             .setCustomId('SpendAmountInput')
             .setLabel('Monto')
             .setStyle(TextInputStyle.Short)
@@ -27,8 +27,16 @@ module.exports = {
             .setMaxLength(4)
             .setRequired(true);
 
+        // const date = new TextInputBuilder()
+        //     .setCustomId('SpendDateInput')
+        //     .setLabel('Monto')
+        //     .setStyle(TextInputStyle.Short)
+        //     .setMinLength(1)
+        //     .setMaxLength(4)
+        //     .setRequired(true);
+
         const firstRow = new ActionRowBuilder().addComponents(description);
-        const secondRow = new ActionRowBuilder().addComponents(monto);
+        const secondRow = new ActionRowBuilder().addComponents(amount);
 
         modal.addComponents(firstRow, secondRow);
 

@@ -64,7 +64,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(0xf1c40f)
                 .setTitle(`Virtual Card: ${card.description}`)
-                .setDescription('Detalle de su Virtual Card')
+                .setDescription(new Date(card.createdAt).toDateString())
                 .addFields(
                     { name: 'Gasto mínimo', value: safeValueToString(card.balance), inline: true },
                     { name: 'Gasto máximo', value: safeValueToString(card.max_amount), inline: true },

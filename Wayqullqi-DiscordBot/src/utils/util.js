@@ -31,6 +31,15 @@ function createDateString(locale, year, month, day){
   return date.toLocaleDateString(locale, options);
 }
 
+function getMonthDateString(locale, year, month, day){
+  const date = new Date(year, month - 1, day);
+  const options = {
+    month: 'long',
+  };
+
+  return date.toLocaleDateString(locale, options);
+}
+
 function buildTable(headers, rows, maxColWidth = 30) {
   // 1️⃣ Determinar el ancho máximo de cada columna
   const colWidths = headers.map((header, i) => {
@@ -69,4 +78,4 @@ function buildTable(headers, rows, maxColWidth = 30) {
   return "```\n" + headerLine + "\n" + separator + "\n" + body + "\n```";
 }
 
-module.exports = { safeValueToString, checkOnlyLetters, checkOnlyNumber, checkNumber, createDateString, buildTable};
+module.exports = { safeValueToString, checkOnlyLetters, checkOnlyNumber, checkNumber, createDateString, getMonthDateString, buildTable};
