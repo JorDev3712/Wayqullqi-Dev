@@ -10,9 +10,9 @@ module.exports = {
         const form = interaction.fields;
         const description = form.getTextInputValue('SpendNameInput');
         const amount = form.getTextInputValue('SpendAmountInput');
-        if (!checkOnlyLetters(description, 21)){
+        if (!checkOnlyLetters(description, 30)){
             await interaction.reply({
-                content: 'En la descripción solo se permiten letras y hasta 21 caracteres.',
+                content: 'En la descripción solo se permiten letras y hasta 30 caracteres.',
                 flags: MessageFlags.Ephemeral
             });
             return;

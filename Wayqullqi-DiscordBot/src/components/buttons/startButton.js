@@ -11,7 +11,7 @@ module.exports = {
         const [resultCode, userEntity] = await AuthController.checkUser(interaction);
         if (resultCode == 0){
             await interaction.editReply({
-                content: `Bienvenido ${userEntity.discordUser}`,
+                content: `Bienvenido ${userEntity.discordNickname}`,
                 components: [profileMenu],
                 flags: MessageFlags.Ephemeral
             });

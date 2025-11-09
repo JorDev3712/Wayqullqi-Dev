@@ -18,12 +18,12 @@ export class UserService {
         });
     }
 
-    public async create(id: string, email: string, discordUser: string, discordId: bigint){
+    public async create(id: string, discordNickname: string, discordUser: string, discordId: bigint){
         return await db.user.create({
             data: {
                 id,
-                email,
                 discordUser,
+                discordNickname,
                 clientId: discordId,
                 cards: {
                     create: [

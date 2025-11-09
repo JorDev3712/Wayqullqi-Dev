@@ -1,6 +1,6 @@
 const { MessageFlags, EmbedBuilder } = require('discord.js');
 
-const { buildTable, checkNumber, getMonthDateString } = require('../../utils/util');
+const { buildTable, checkNumber, createDateString, getMonthDateString } = require('../../utils/util');
 
 const SpendController = require('../../controllers/moneySpendController');
 
@@ -64,7 +64,7 @@ module.exports = {
                 total = total + Number(spend.amount);
             }
 
-            embed.setDescription(buildTable(['Descripción', 'Monto', 'Fecha'], spends.map(x => [x.name, Number(x.amount), new Date(x.createdAt).toDateString()])));
+            embed.setDescription(buildTable(['Descripción', 'Monto', 'Fecha'], spends.map(x => [x.name, Number(x.amount), new Date(x.createdAt.replace('Z', '')).toDateString()])));
 
             embed.setFooter({
                 text: `Total Gastado: S/${total}`,

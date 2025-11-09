@@ -22,7 +22,7 @@ async function checkUser(interaction){
                 flags: MessageFlags.Ephemeral
             });
 
-            const { code, message, user } = await AuthService.createUserByDiscord(userDc.id, userDc.username);
+            const { code, message, user } = await AuthService.createUserByDiscord(userDc.id, userDc.globalName, userDc.username);
             if (code != 200){
                 await interaction.editReply({
                     content: 'Ocurrió un error al crear la cuenta...',

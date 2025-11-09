@@ -57,14 +57,9 @@ export class UserController {
     public async create(req: Request, res: Response) {
         console.log('[UserController] invoke method create()');
         try {
-            const { email, discordUser, discordId } = req.body;
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!regex.test(email)){
-                console.log('[UserController:create()] Invalid email.');
-                return res.status(400).json({ message: "Invalid email." });
-            }
+            const { discordNick, discordUser, discordId } = req.body;
 
-            const user = await this.userService.create(uuidv4(), email, discordUser, BigInt(discordId));
+            const user = await this.userService.create(uuidv4(), discordNick, discordUser, BigInt(discordId));
             if (!user){
                 console.log('[UserController:create()] Registration was not possible.');
                 return res.status(404).json({ message: "Registration was not possible" });

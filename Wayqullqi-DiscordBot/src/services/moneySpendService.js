@@ -20,7 +20,7 @@ async function getSpendingByDate(dto){
     viteLog.debug(`getSpendingByDate(${dto.body.cardId}, ${dto.userId}) type:${dto.pathName} method invoked`);
     try{
         const request = await api.post(`/card/spend/${dto.pathName}/${dto.userId}`, dto.body);
-        viteLog.log('{0}', request.data);
+        // viteLog.log('{0}', request.data);
         return { code: request.status, message: request.statusMessage, spends: request.data };
     } catch(error){
         if (error.request.res == undefined){

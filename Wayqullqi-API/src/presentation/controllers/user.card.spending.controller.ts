@@ -226,9 +226,9 @@ export class UserCardSpendingController {
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
-            if (!checkOnlyLetters(name, 21)){
+            if (!checkOnlyLetters(name, 30)){
                 console.log('[UserCardSpendingController] Invalid name');
-                return res.status(400).json({ message: "Invalid name: only letters allowed and less than 21 characters." });
+                return res.status(400).json({ message: "Invalid name: only letters allowed and less than 30 characters." });
             }
 
             if (!checkOnlyNumber(amount, 4)){

@@ -16,7 +16,7 @@ module.exports = {
             .setLabel('Descripción')
             .setStyle(TextInputStyle.Short)
             .setMinLength(4)
-            .setMaxLength(21)
+            .setMaxLength(30)
             .setRequired(true);
 
         const amount = new TextInputBuilder()

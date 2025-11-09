@@ -33,11 +33,11 @@ async function getUserByDiscordId(dcId){
     }
 }
 
-async function createUserByDiscord(dcId, user){
+async function createUserByDiscord(dcId, nickname, user){
     viteLog.debug(`createUserByDiscord(${dcId}) method invoked`);
     try{
         const body = {
-            email: `${dcId}@gmail.com`,
+            discordNick: nickname,
             discordUser: user,
             discordId: id
         };
