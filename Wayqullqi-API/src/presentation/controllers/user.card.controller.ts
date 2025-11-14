@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { v4 as uuidv4, validate as uuidValidate, version as uuidVersion } from "uuid";
 import { UserCardService } from "../../application/user.card.service";
 
+import { checkDescriptionLetters, checkOnlyNumber, checkOnlyLetters } from "../../utils/util";
+
 export class UserCardController {
     constructor(private readonly userCardService: UserCardService) { }
 
@@ -84,6 +86,36 @@ export class UserCardController {
             }
 
             const { description, balance, maxAmount, noticeDay, noticeHour, enable } = req.body;
+
+            if (!checkDescriptionLetters(description, 20)) {
+                console.log('[UserCardController] Invalid Description.');
+                return res.status(400).json({ message: "Invalid Description" });
+            }
+
+            if (!checkOnlyNumber(balance, 3)) {
+                console.log('[UserCardController] Invalid Balance.');
+                return res.status(400).json({ message: "Invalid Balance" });
+            }
+
+            if (!checkOnlyNumber(maxAmount, 3)) {
+                console.log('[UserCardController] Invalid Amount.');
+                return res.status(400).json({ message: "Invalid Amount" });
+            }
+
+            if (!checkOnlyNumber(noticeDay, 2)) {
+                console.log('[UserCardController] Invalid Notice by Day.');
+                return res.status(400).json({ message: "Notice by Day" });
+            }
+
+            if (!checkOnlyNumber(noticeHour, 2)) {
+                console.log('[UserCardController] Invalid Notice by Hour.');
+                return res.status(400).json({ message: "Notice by Hour" });
+            }
+
+            if (!checkOnlyLetters(enable, 2)) {
+                console.log('[UserCardController] Invalid enable notice.');
+                return res.status(400).json({ message: "Notice enable notice" });
+            }
 
             const card = await this.userCardService.create(userId, uuidv4(), description, balance, maxAmount, noticeDay, noticeHour, enable);
             if (!card){

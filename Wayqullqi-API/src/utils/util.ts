@@ -10,6 +10,11 @@ export function checkOnlyLetters(value: string, length: number): boolean {
   return regex.test(value) && value.length <= length;
 }
 
+export function checkDescriptionLetters(value: string, length: number): boolean {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s.-]+$/;
+  return regex.test(value) && value.length <= length;
+}
+
 export function checkOnlyNumber(value: any, length: number): boolean {
   const regex = /^[0-9]+(\.[0-9]+)?$/;
   return regex.test(value.toString()) && value.toString().length <= length;
