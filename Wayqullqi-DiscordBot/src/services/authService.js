@@ -10,10 +10,10 @@ async function getUser(id){
     } catch(error){
         if (error.request.res == undefined){
             viteLog.error(`Service Unavailable { code: 503 }`);
-            return { code: 503, message: 'Service Unavailable', user: null };
+            throw { code: 503, message: 'Service Unavailable', user: null };
         }
         viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
-        return { code: error.status, message: error.request.res.statusMessage, user: null };
+        throw { code: error.status, message: error.request.res.statusMessage, user: null };
     }
 }
 
@@ -26,10 +26,10 @@ async function getUserByDiscordId(dcId){
     } catch(error){
         if (error.request.res == undefined){
             viteLog.error(`Service Unavailable { code: 503 }`);
-            return { code: 503, message: 'Service Unavailable', user: null };
+            throw { code: 503, message: 'Service Unavailable', user: null };
         }
         viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
-        return { code: error.status, message: error.request.res.statusMessage, user: null };
+        throw { code: error.status, message: error.request.res.statusMessage, user: null };
     }
 }
 
@@ -46,10 +46,10 @@ async function createUserByDiscord(dcId, nickname, user){
     } catch(error){
         if (error.request.res == undefined){
             viteLog.error(`Service Unavailable { code: 503 }`);
-            return { code: 503, message: 'Service Unavailable', data: null };
+            throw { code: 503, message: 'Service Unavailable', data: null };
         }
         viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
-        return { code: error.status, message: error.request.res.statusMessage, data: null };
+        throw { code: error.status, message: error.request.res.statusMessage, data: null };
     }
 }
 

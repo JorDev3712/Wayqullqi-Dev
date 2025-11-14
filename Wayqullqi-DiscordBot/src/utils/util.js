@@ -10,6 +10,11 @@ function checkOnlyLetters(value, length) {
   return regex.test(value) && value.length <= length;
 }
 
+function checkDescriptionLetters(value, length) {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s.-]+$/;
+  return regex.test(value) && value.length <= length;
+}
+
 function checkOnlyNumber(value, length) {
   const regex = /^[0-9]+(\.[0-9]+)?$/;
   return regex.test(value) && value.length <= length;
@@ -78,4 +83,4 @@ function buildTable(headers, rows, maxColWidth = 30) {
   return "```\n" + headerLine + "\n" + separator + "\n" + body + "\n```";
 }
 
-module.exports = { safeValueToString, checkOnlyLetters, checkOnlyNumber, checkNumber, createDateString, getMonthDateString, buildTable};
+module.exports = { safeValueToString, checkOnlyLetters, checkDescriptionLetters, checkOnlyNumber, checkNumber, createDateString, getMonthDateString, buildTable};

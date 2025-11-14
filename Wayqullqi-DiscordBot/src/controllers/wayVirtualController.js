@@ -78,7 +78,50 @@ async function checkCardOne(interaction, cardId, userId){
     }
 }
 
+async function create(interaction, userId, name, minSpend, maxSpend, noticeDay, noticeEnable){
+    viteLog.debug('create() method invoked');
+    try{
+        await interaction.reply({
+            content: 'Procesando datos al servidor...',
+            flags: MessageFlags.Ephemeral
+        });
+
+        const response = await WayVirtualService.postCreate({ 
+            userId, 
+            body: { 
+                description: name,
+                balance: minSpend,
+                maxAmount: maxSpend,
+                noticeDay,
+                // To do
+                noticeHour: 1,
+                enable: noticeEnable
+             }
+        });
+        if (!response.card){
+            viteLog.debug('Ocurrió un error al procesar los datos con el servidor en la cuenta - Server code: {1}.', userId, response.code);
+            await interaction.editReply({
+                content: 'Ocurrió un error al procesar los datos con el servidor.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [2, null];
+        }
+
+        viteLog.debug('Done');
+        return [0, response.card];
+
+    } catch (error){
+        console.log(error);
+        await interaction.editReply({
+            content: '❌ No pude procesar tu datos en este momento.',
+            flags: MessageFlags.Ephemeral
+        });
+        return [1, null];
+    }
+}
+
 module.exports = {
     checkCards,
     checkCardOne,
+    create
 };

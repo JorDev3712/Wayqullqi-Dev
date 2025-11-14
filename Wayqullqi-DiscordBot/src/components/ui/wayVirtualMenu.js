@@ -1,17 +1,24 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+} = require('discord.js');
 
-module.exports = new ActionRowBuilder().addComponents(
-    // Añadir gasto, eliminar gasto, borrar gasto
-      // new ButtonBuilder()
-      //   .setCustomId('onWayVirtualShowButtonClick')
-      //   .setLabel('💳 Way Virtuals')
-      //   .setStyle(ButtonStyle.Primary),
-      // new ButtonBuilder()
-      //   .setCustomId('onProfileClick')
-      //   .setLabel('🖥️ Perfil')
-      //   .setStyle(ButtonStyle.Success),
-      // new ButtonBuilder()
-      //   .setCustomId('onDeleteAccountButtonClick')
-      //   .setLabel('❌ Eliminar cuenta')
-      //   .setStyle(ButtonStyle.Danger)
-);
+module.exports = {
+    create(cards) {
+      let buttons = [];
+      const builder = new ActionRowBuilder();
+      for (let i = 0; i < cards.length; i++) {
+        let card = cards[i];
+        buttons.push(
+          new ButtonBuilder()
+          .setCustomId(`OnCardClick:${card.id}:${card.user_id}`)
+          .setLabel(`${card.description} #${i + 1} 🎫`)
+          // .setEmoji('​🎫')
+          .setStyle(ButtonStyle.Secondary)
+        );
+      }
+      builder.addComponents(buttons);
+      return builder;
+    }
+};

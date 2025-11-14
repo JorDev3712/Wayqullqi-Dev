@@ -8,7 +8,7 @@ const profileMenu = require('../../components/ui/profileMenu');
 module.exports = {
     customId: 'onStartButtonClick',
     async execute(interaction) {
-        const [resultCode, userEntity] = await AuthController.checkUser(interaction);
+        const [resultCode, userEntity] = await AuthController.checkOrCreateUser(interaction);
         if (resultCode == 0){
             await interaction.editReply({
                 content: `Bienvenido ${userEntity.discordNickname}`,
@@ -16,11 +16,5 @@ module.exports = {
                 flags: MessageFlags.Ephemeral
             });
         }
-        // else {
-        //     await interaction.followUp({
-        //         content: '❌ No pude verificar tu cuenta en este momento.',
-        //         flags: MessageFlags.Ephemeral
-        //     });
-        // }
     },
 };

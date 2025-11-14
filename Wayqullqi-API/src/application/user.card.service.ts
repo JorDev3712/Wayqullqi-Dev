@@ -23,6 +23,9 @@ export class UserCardService {
         return await db.user_Card.findMany({
             where: {
                 user_id: userId
+            },
+            orderBy: {
+                createdAt: 'asc'
             }
         })
     }

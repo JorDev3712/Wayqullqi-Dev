@@ -4,8 +4,8 @@ const AuthService = require('../services/authService');
 
 const viteLog = require('../utils/logger').createContext('AuthController');
 
-async function checkUser(interaction){
-    viteLog.debug('Invoked method checkUser()');
+async function checkOrCreateUser(interaction){
+    viteLog.debug('Invoked method checkOrCreateUser()');
     try{
         const userDc = interaction.user;
         // username, globalName, avatar, id, banner, accentColor
@@ -47,6 +47,31 @@ async function checkUser(interaction){
     }
 }
 
+async function checkUser(interaction){
+    viteLog.debug('Invoked method checkUser()');
+    try{
+        const userDc = interaction.user;
+        const { code, message, user } = await AuthService.getUserByDiscordId(userDc.id);
+        if (!user){
+            viteLog.debug('Usuario con id {0} no se encuentra registrado.', userDc.id);
+            await interaction.reply({
+                content: 'No se verificó una cuenta creada, es necesario ingresar por el comando /start.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [2, null];
+        }
+
+        return [0, user];
+    } catch (error){
+        await interaction.reply({
+            content: '❌ No pude verificar tus datos en estos momentos.',
+            flags: MessageFlags.Ephemeral
+        });
+        return [1, null];
+    }
+}
+
 module.exports = {
-    checkUser,
+    checkOrCreateUser,
+    checkUser
 };
