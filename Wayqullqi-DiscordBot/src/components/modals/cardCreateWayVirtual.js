@@ -57,7 +57,7 @@ module.exports = {
         const [resultCode, card] = await WayVirtualController.create(interaction, args[0], descriptionInput, Number(minSpendInput), Number(maxSpendInput), Number(noticeDayInput), noticeEnableInput.toLowerCase() === "si");
         if (resultCode == 0){
             await interaction.editReply({
-                content: `🤖​ Se ha creado una Way Virtual "${card.description}", en tu cuenta correctamente.`,
+                content: `🤖​ Se ha creado una Way Virtual "${card.description}" correctamente en tu cuenta.`,
                 flags: MessageFlags.Ephemeral
             });
         }

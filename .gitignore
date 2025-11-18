@@ -1,4 +1,5 @@
 Wayqullqi-API/node_modules/*
+Wayqullqi-API/dist/*
 Wayqullqi-DiscordBot/node_modules/*
 Wayqullqi-API/generated/prisma/*
 Wayqullqi-API/prisma/*
