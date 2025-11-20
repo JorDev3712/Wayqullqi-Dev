@@ -30,8 +30,14 @@ module.exports = {
 
         switch (resultCode) {
             case 0:
+                const [code, card] = await SpendController.checkCardOne(spend.card_id, spend.user_id);
+
                 await interaction.editReply({
-                    content: `✅ Se ha registrado el gasto correctamente.\n💰 Monto: ${spend.amount}`,
+                    content: "``` *** Detalle del Gasto ***\n" + 
+                              "📝​ Descripción: " + description + "\n" +
+                              "💰 Monto: " + spend.amount + "\n" +
+                              "🎫 Way Virtual: " + (card?.description ?? 'unknown') + "```\n" +
+                              "✅ Se guardó correctamente.",
                     flags: MessageFlags.Ephemeral
                 });
                 break;

@@ -77,7 +77,7 @@ module.exports = {
                     //   inline: false
                     // }
                 )
-                .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail('https://images.icon-icons.com/550/PNG/512/business-color_badge_icon-icons.com_53477.png')
                 .setFooter({
                     text: 'Wayqullqi Bot',
                     iconURL: interaction.client.user.displayAvatarURL(),
