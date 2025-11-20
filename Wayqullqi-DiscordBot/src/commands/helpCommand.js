@@ -10,7 +10,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.reply({
-      content: '📊 **Guide**',
+      content: '📊 **Ayuda**',
       components: [homeMenu],
       flags: MessageFlags.Ephemeral
     });

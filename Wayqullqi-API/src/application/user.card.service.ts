@@ -45,4 +45,22 @@ export class UserCardService {
             }
         });
     }
+
+    public async update(userId: string, cardId: string, description: string, balance: number, max_amount: number, notice_day: number, notice_hour: number, enable_notice: boolean){
+        return await db.user_Card.update({
+            where: {
+                id: cardId,
+                user_id: userId
+            },
+            data: {
+                description,
+                balance,
+                max_amount,
+                notice_day,
+                notice_hour,
+                enable_notice,
+                deleted: false
+            }
+        });
+    }
 }

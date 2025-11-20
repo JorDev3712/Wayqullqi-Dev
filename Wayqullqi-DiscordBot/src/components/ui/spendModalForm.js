@@ -29,7 +29,15 @@ module.exports = {
 
         // const date = new TextInputBuilder()
         //     .setCustomId('SpendDateInput')
-        //     .setLabel('Monto')
+        //     .setLabel('Mes')
+        //     .setStyle(TextInputStyle.Short)
+        //     .setMinLength(1)
+        //     .setMaxLength(4)
+        //     .setRequired(true);
+
+        // const date = new TextInputBuilder()
+        //     .setCustomId('SpendDateInput')
+        //     .setLabel('Dia')
         //     .setStyle(TextInputStyle.Short)
         //     .setMinLength(1)
         //     .setMaxLength(4)

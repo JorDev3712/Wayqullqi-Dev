@@ -34,9 +34,25 @@ async function getCardOne(cardId, userId){
 }
 
 async function postCreate(dto){
-    viteLog.debug(`postAddWayVirtual(${dto.userId}) method invoked`);
+    viteLog.debug(`postCreateCard(${dto.userId}) method invoked`);
     try{
         const request = await api.post(`/card/create/${dto.userId}`, dto.body);
+        viteLog.log('{0}', request.data);
+        return { code: request.status, message: request.statusMessage, card: request.data };
+    } catch(error){
+        if (error.request.res == undefined){
+            viteLog.error(`Service Unavailable { code: 503 }`);
+            return { code: 503, message: 'Service Unavailable', card: null };
+        }
+        viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
+        return { code: error.status, message: error.request.res.statusMessage, card: null };
+    }
+}
+
+async function putUpdateCard(dto){
+    viteLog.debug(`putUpdateCard(${dto.userId}) method invoked`);
+    try{
+        const request = await api.put(`/card/update/${dto.userId}`, dto.body);
         viteLog.log('{0}', request.data);
         return { code: request.status, message: request.statusMessage, card: request.data };
     } catch(error){
@@ -52,5 +68,6 @@ async function postCreate(dto){
 module.exports = {
     getCards,
     getCardOne,
-    postCreate
+    postCreate,
+    putUpdateCard
 };
