@@ -72,7 +72,7 @@ module.exports = {
             });
 
             await interaction.editReply({
-                content: `🤖 Estos fueron tus movimientos en ${getMonthDateString('es-PE', year, month, 1)}.`,
+                content: `🤖 Estos son tus movimientos en el mes de ${getMonthDateString('es-PE', year, month, 1)}.`,
                 embeds: [embed],
                 flags: MessageFlags.Ephemeral
             });
