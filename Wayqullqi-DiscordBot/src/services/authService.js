@@ -53,8 +53,24 @@ async function createUserByDiscord(dcId, nickname, user){
     }
 }
 
+async function putDeleteAccount(dto){
+    viteLog.debug(`putDeleteAccount(${dto.body.discordId}) method invoked`);
+    try{
+        const request = await api.put(`/user/discord/delete`, dto.body);
+        return { code: request.status, message: request.statusMessage, data: request.data };
+    } catch(error){
+        if (error.request.res == undefined){
+            viteLog.error(`Service Unavailable { code: 503 }`);
+            throw { code: 503, message: 'Service Unavailable', data: null };
+        }
+        viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
+        throw { code: error.status, message: error.request.res.statusMessage, data: null };
+    }
+}
+
 module.exports = {
     getUser,
     getUserByDiscordId,
-    createUserByDiscord
+    createUserByDiscord,
+    putDeleteAccount
 };

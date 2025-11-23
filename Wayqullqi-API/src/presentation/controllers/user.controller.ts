@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { v4 as uuidv4, validate as uuidValidate, version as uuidVersion } from "uuid";
 import { UserService } from "../../application/user.service";
 
+import { checkNumber } from "../../utils/util";
+
 export class UserController {
     constructor(private readonly userService: UserService) {}
     public async getUser(req: Request, res: Response) {
@@ -70,6 +72,39 @@ export class UserController {
         } catch (error){
             console.error(error);
             return res.status(500).json({message: "Server error @Users->creation"});
+        }
+    }
+
+    public async putDeleteAccount(req: Request, res: Response) {
+        console.log('[UserController] invoke method putDeleteAccount()');
+        try {
+            const { discordId } = req.body;
+
+            if (!checkNumber(discordId, 40)){
+                return res.status(400).json({ message: "Invalid discord ID" });
+            }
+
+            let entity = await this.userService.getClientId(discordId);
+            if (!entity){
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            if (entity.deleted == true){
+                console.log('[UserController] User deletion in progress.');
+                return res.status(200).json({active: true});
+            }
+
+            entity = await this.userService.updateDelete(entity.id);
+            if (!entity){
+                console.log('[UserController] User deletion was not possible.');
+                return res.status(200).json({result: false});
+            }
+
+            console.log('[UserController] Done');
+            return res.status(200).json({result: true});
+        } catch (error){
+            console.error(error);
+            return res.status(500).json({message: "Server error @Users->putDeleteAccount"});
         }
     }
 }

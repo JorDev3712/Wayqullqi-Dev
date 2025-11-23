@@ -24,6 +24,14 @@ async function checkCards(interaction){
             return [2, []];
         }
 
+        if (checkUser.user.deleted == true){
+            await interaction.editReply({
+                content: '🤖​ Cuenta con un proceso activo de eliminación de cuenta.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [4, []];
+        }
+
         const response = await WayVirtualService.getCards(checkUser.user.id);
         if (response.cards == null){
             viteLog.debug('Ocurrió un error al verificar los datos de la cuenta {0}.', userDc.id);
