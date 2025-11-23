@@ -10,7 +10,7 @@ module.exports = {
     async execute(interaction) {
         const [resultCode, userEntity] = await AuthController.checkOrCreateUser(interaction);
         if (resultCode == 0){
-            let welcome = userEntity.deleted == true ? `🔔 ${userEntity.discordNickname}, antes que sigas, tienes una eliminación pendiente. Puedes cancelarla si fue un error.` : `👋 Bienvenido ${userEntity.discordNickname}`;
+            let welcome = userEntity.deleted == true ? `🔔🤖​ ${userEntity.discordNickname}, tienes una eliminación pendiente. Puedes cancelarla si fue un error.` : `👋 Bienvenido ${userEntity.discordNickname}`;
 
             await interaction.editReply({
                 content: welcome,
