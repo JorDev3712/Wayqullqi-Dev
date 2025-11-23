@@ -73,7 +73,7 @@ module.exports = {
     createEmpty(customId) {
         const modal = new ModalBuilder()
             .setCustomId(customId)
-            .setTitle('🎫 Crea una nueva WayVirtual a tu cuenta');
+            .setTitle('🎫 Crea una nueva WayVirtual en tu cuenta');
         
         const description = new TextInputBuilder()
             .setCustomId('CardNameInput')
