@@ -9,7 +9,7 @@ module.exports = {
     create(cardId, userId) {
         const modal = new ModalBuilder()
             .setCustomId(`OnSpendFormSubmit:${cardId}:${userId}`)
-            .setTitle('💸 Registrar un nuevo gasto');
+            .setTitle('💸 Registrar un gasto rápido');
         
         const description = new TextInputBuilder()
             .setCustomId('SpendNameInput')

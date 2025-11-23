@@ -30,7 +30,7 @@ module.exports = {
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
                     .setCustomId(`OnCardMoneySpentClick:${cardIds}`)
-                    .setLabel('➕ Agregar gasto')
+                    .setLabel('➕ Agregar gasto rápido')
                     // .setEmoji('➕​​')
                     .setStyle(ButtonStyle.Secondary),
             );
