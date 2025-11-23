@@ -41,13 +41,13 @@ export class UserService {
         })
     }
 
-    public async updateDelete(id: string){
+    public async updateDelete(id: string, value: boolean){
         return await db.user.update({
             where: {
                 id,
             },
             data: {
-                deleted: true
+                deleted: value
             }
         });
     }

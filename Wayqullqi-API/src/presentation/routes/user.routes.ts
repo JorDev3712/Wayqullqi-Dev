@@ -11,5 +11,6 @@ router.get("/:id", controller.getUser.bind(controller));
 router.get("/discord/:id", controller.getUserByClientId.bind(controller));
 router.post("/discord/create", controller.create.bind(controller));
 router.put("/discord/delete", controller.putDeleteAccount.bind(controller));
+router.put("/discord/return", controller.putRemoveDeleteAccount.bind(controller));
 
 export default router;

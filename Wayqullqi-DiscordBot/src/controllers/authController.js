@@ -63,7 +63,7 @@ async function checkUser(interaction){
 
         if (user.deleted == true){
             await interaction.reply({
-                content: '🤖​ Cuenta con un proceso activo de eliminación de cuenta.',
+                content: '🤖​ Cuenta con un proceso activo de eliminación de usuario.',
                 flags: MessageFlags.Ephemeral
             });
             return [3, null];
@@ -85,11 +85,12 @@ async function updateDeleteAccount(interaction){
         const userDc = interaction.user;
 
         await interaction.reply({
-            content: 'Iniciando proceso de eliminación de cuenta...',
+            content: 'Solicitando petición al servidor...',
             flags: MessageFlags.Ephemeral
         });
 
         const response = await AuthService.putDeleteAccount({
+            url: '/user/discord/delete',
             body: {
                 discordId: userDc.id 
             }
@@ -106,7 +107,59 @@ async function updateDeleteAccount(interaction){
 
         if (response.data.active == true){
             await interaction.editReply({
-                content: '🤖​ Ya cuenta con un proceso activo de eliminación de cuenta.',
+                content: '🤖​ Ya cuenta con un proceso activo de eliminación de usuario.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [3, false];
+        }
+
+        if (response.data.result == false){
+            await interaction.editReply({
+                content: '🤖​ Ups, hubo un error al realizar la petición al servidor. Por favor vuelve a intentar en otro momento.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [4, response.data.result];
+        }
+
+        return [0, response.data.result];
+    } catch (error){
+        await interaction.editReply({
+            content: '❌ No tuve respuesta del servidor...Por favor vuelve a intentar en otro momento.',
+            flags: MessageFlags.Ephemeral
+        });
+        return [1, false];
+    }
+}
+
+async function updateReturnAccount(interaction){
+    viteLog.debug('Invoked method updateReturnAccount()');
+    try{
+        const userDc = interaction.user;
+
+        await interaction.reply({
+            content: 'Solicitando petición al servidor...',
+            flags: MessageFlags.Ephemeral
+        });
+
+        const response = await AuthService.putDeleteAccount({
+            url: '/user/discord/return',
+            body: {
+                discordId: userDc.id 
+            }
+        });
+
+        if (!response.data){
+            viteLog.debug('Usuario con id {0} no se encuentra registrado.', userDc.id);
+            await interaction.editReply({
+                content: '👀​ Ups, es necesario tener una cuenta para realizar esta acción.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [2, false];
+        }
+
+        if (response.data.progress == false){
+            await interaction.editReply({
+                content: '🤖​ Su cuenta no tiene un proceso activo de eliminación de usuario.',
                 flags: MessageFlags.Ephemeral
             });
             return [3, false];
@@ -133,5 +186,6 @@ async function updateDeleteAccount(interaction){
 module.exports = {
     checkOrCreateUser,
     checkUser,
-    updateDeleteAccount
+    updateDeleteAccount,
+    updateReturnAccount
 };

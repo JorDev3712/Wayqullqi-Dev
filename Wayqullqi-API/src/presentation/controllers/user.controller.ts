@@ -94,7 +94,7 @@ export class UserController {
                 return res.status(200).json({active: true});
             }
 
-            entity = await this.userService.updateDelete(entity.id);
+            entity = await this.userService.updateDelete(entity.id, true);
             if (!entity){
                 console.log('[UserController] User deletion was not possible.');
                 return res.status(200).json({result: false});
@@ -105,6 +105,39 @@ export class UserController {
         } catch (error){
             console.error(error);
             return res.status(500).json({message: "Server error @Users->putDeleteAccount"});
+        }
+    }
+
+    public async putRemoveDeleteAccount(req: Request, res: Response) {
+        console.log('[UserController] invoke method putRemoveDeleteAccount()');
+        try {
+            const { discordId } = req.body;
+
+            if (!checkNumber(discordId, 40)){
+                return res.status(400).json({ message: "Invalid discord ID" });
+            }
+
+            let entity = await this.userService.getClientId(discordId);
+            if (!entity){
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            if (entity.deleted == false){
+                console.log('[UserController] User is not deleted.');
+                return res.status(200).json({progress: false});
+            }
+
+            entity = await this.userService.updateDelete(entity.id, false);
+            if (!entity){
+                console.log('[UserController] Remove deletion was not possible.');
+                return res.status(200).json({result: false});
+            }
+
+            console.log('[UserController] Done');
+            return res.status(200).json({result: true});
+        } catch (error){
+            console.error(error);
+            return res.status(500).json({message: "Server error @Users->putRemoveDeleteAccount"});
         }
     }
 }

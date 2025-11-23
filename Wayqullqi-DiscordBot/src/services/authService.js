@@ -56,7 +56,7 @@ async function createUserByDiscord(dcId, nickname, user){
 async function putDeleteAccount(dto){
     viteLog.debug(`putDeleteAccount(${dto.body.discordId}) method invoked`);
     try{
-        const request = await api.put(`/user/discord/delete`, dto.body);
+        const request = await api.put(dto.url, dto.body);
         return { code: request.status, message: request.statusMessage, data: request.data };
     } catch(error){
         if (error.request.res == undefined){
