@@ -112,7 +112,7 @@ export class UserCardController {
                 return res.status(400).json({ message: "Notice by Hour" });
             }
 
-            if (!checkOnlyLetters(enable.toString(), 4)) {
+            if (!checkOnlyLetters(enable.toString(), 5)) {
                 console.log('[UserCardController] Invalid enable notice.');
                 return res.status(400).json({ message: "Notice enable notice" });
             }
@@ -172,7 +172,7 @@ export class UserCardController {
                 return res.status(400).json({ message: "Notice by Hour" });
             }
 
-            if (!checkOnlyLetters(enable.toString(), 4)) {
+            if (!checkOnlyLetters(enable.toString(), 5)) {
                 console.log('[UserCardController] Invalid enable notice.');
                 return res.status(400).json({ message: "Notice enable notice" });
             }
