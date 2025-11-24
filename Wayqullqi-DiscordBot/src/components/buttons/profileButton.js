@@ -12,7 +12,7 @@ module.exports = {
         if (resultCode == 0){
             await interaction.reply({
                 content: `🤖 Información de la cuenta obtenida satisfactoriamente.`,
-                embeds: [embed.create(interaction, interaction.user, userEntity)],
+                embeds: [embed.create(interaction.client.user.displayAvatarURL(), interaction.user, userEntity)],
                 flags: MessageFlags.Ephemeral
             });
         }

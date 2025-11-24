@@ -1,9 +1,9 @@
-const { ActionRowBuilder, EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const { safeValueToString } = require('../../utils/util');
 
 module.exports = {
-    create(interaction, user, userEntity){
+    create(iconBotUrl, user, userEntity){
         return new EmbedBuilder()
                 .setColor(0xf1c40f)
                 .setTitle(`Perfil de la cuenta`)
@@ -17,7 +17,7 @@ module.exports = {
                 .setThumbnail(user.displayAvatarURL({ dynamic: true }))
                 .setFooter({
                     text: 'Wayqullqi Bot',
-                    iconURL: interaction.client.user.displayAvatarURL(),
+                    iconURL: iconBotUrl,
                 })
                 .setTimestamp();
     }
