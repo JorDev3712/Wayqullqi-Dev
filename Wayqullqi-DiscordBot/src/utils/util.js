@@ -25,6 +25,12 @@ function checkNumber(value, length) {
   return regex.test(value) && value.length <= length;
 }
 
+function checkHourFormat(value, length) {
+  // Formato HH:MM (00–23 y 00–59)
+  const regex = /^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/;
+  return regex.test(value) && value.length <= length;
+}
+
 function createDateString(locale, year, month, day){
   const date = new Date(year, month - 1, day);
   const options = {
@@ -33,6 +39,15 @@ function createDateString(locale, year, month, day){
     year: 'numeric'
   };
 
+  return date.toLocaleDateString(locale, options);
+}
+
+function getDateString(locale, date) {
+  const options = {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    };
   return date.toLocaleDateString(locale, options);
 }
 
@@ -83,4 +98,4 @@ function buildTable(headers, rows, maxColWidth = 30) {
   return "```\n" + headerLine + "\n" + separator + "\n" + body + "\n```";
 }
 
-module.exports = { safeValueToString, checkOnlyLetters, checkDescriptionLetters, checkOnlyNumber, checkNumber, createDateString, getMonthDateString, buildTable};
+module.exports = { safeValueToString, checkOnlyLetters, checkDescriptionLetters, checkOnlyNumber, checkNumber, createDateString, checkHourFormat, getMonthDateString, getDateString, buildTable};

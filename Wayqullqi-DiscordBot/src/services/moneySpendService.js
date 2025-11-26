@@ -32,15 +32,26 @@ async function getSpendingByDate(dto){
     }
 }
 
-async function postCreate(cardId, userId, name, amount){
-    viteLog.debug(`postCreate(${cardId}, ${userId}) method invoked`);
+async function postCreate(dto){
+    viteLog.debug(`postCreate(${dto.body.cardId}, ${dto.userId}) method invoked`);
     try{
-        const body = {
-            cardId,
-            name,
-            amount
-        };
-        const request = await api.post(`/card/spend/create/${userId}`, body);
+        const request = await api.post(`/card/spend/create/fast/${dto.userId}`, dto.body);
+        viteLog.log('{0}', request.data);
+        return { code: request.status, message: request.statusMessage, spend: request.data };
+    } catch(error){
+        if (error.request.res == undefined){
+            viteLog.error(`Service Unavailable { code: 503 }`);
+            throw { code: 503, message: 'Service Unavailable', spend: null };
+        }
+        viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
+        throw { code: error.status, message: error.request.res.statusMessage, spend: null };
+    }
+}
+
+async function postSpendCreate(dto){
+    viteLog.debug(`postSpendCreate(${dto.body.cardId}, ${dto.userId}) method invoked`);
+    try{
+        const request = await api.post(`/card/spend/create/${dto.userId}`, dto.body);
         viteLog.log('{0}', request.data);
         return { code: request.status, message: request.statusMessage, spend: request.data };
     } catch(error){
@@ -57,4 +68,5 @@ module.exports = {
     getSpendings,
     getSpendingByDate,
     postCreate,
+    postSpendCreate
 };

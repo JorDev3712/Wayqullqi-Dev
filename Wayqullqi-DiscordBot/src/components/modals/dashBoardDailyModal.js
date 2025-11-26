@@ -31,7 +31,7 @@ module.exports = {
 
         if (!checkNumber(monthInput, 2)) {
             await interaction.reply({
-                content: 'En el mes solo se permiten números.',
+                content: 'En el "mes" solo se permiten números.',
                 flags: MessageFlags.Ephemeral
             });
             return;
@@ -40,7 +40,7 @@ module.exports = {
         const month = Number(monthInput);
         if (month < 1 || month > 12) {
             await interaction.reply({
-                content: 'En el día solo se permiten números.',
+                content: 'Por favor, escribe un número de mes válido.',
                 flags: MessageFlags.Ephemeral
             });
             return;
@@ -48,7 +48,7 @@ module.exports = {
 
         if (!checkNumber(dayInput, 2)){
             await interaction.reply({
-                content: 'En el monto solo se permiten números y hasta 4 digitos.',
+                content: 'En el "dia" solo se permiten números.',
                 flags: MessageFlags.Ephemeral
             });
             return;

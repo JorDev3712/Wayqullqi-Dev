@@ -40,7 +40,7 @@ export class UserCardSpendingService {
         // });
     }
 
-    public async create(id: string, userId: string, cardId: string, name: string, amount: number){
+    public async addFast(id: string, userId: string, cardId: string, name: string, amount: number){
         return await db.user_Spending.create({
             data: {
                 id,
@@ -48,6 +48,19 @@ export class UserCardSpendingService {
                 card_id: cardId,
                 name,
                 amount
+            }
+        });
+    }
+
+    public async create(id: string, userId: string, cardId: string, name: string, amount: number, date: Date){
+        return await db.user_Spending.create({
+            data: {
+                id,
+                user_id: userId,
+                card_id: cardId,
+                name,
+                amount,
+                createdAt : date
             }
         });
     }

@@ -229,7 +229,57 @@ async function addSpend(interaction, cardId, userId, name, amount){
             flags: MessageFlags.Ephemeral
         });
 
-        const response = await MoneySpentService.postCreate(cardId, userId, name, amount);
+        const response = await MoneySpentService.postCreate({
+            userId,
+            body: {
+                cardId,
+                name,
+                amount
+            }
+        });
+        if (!response.spend){
+            viteLog.debug('Ocurrió un error al procesar los datos con el servidor en la cuenta - Server code: {1}.', userId, response.code);
+            await interaction.editReply({
+                content: 'Ocurrió un error al procesar los datos con el servidor.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [2, null];
+        }
+
+        viteLog.debug('Done');
+        return [0, response.spend];
+
+    } catch (error){
+        console.log(error);
+        await interaction.editReply({
+            content: '❌ No pude procesar tu datos en este momento.',
+            flags: MessageFlags.Ephemeral
+        });
+        return [1, null];
+    }
+}
+
+async function addSpendData(interaction, cardId, userId, name, amount, month, day, hour, minute){
+    viteLog.debug('addSpendData() method invoked');
+    try{
+        await interaction.reply({
+            content: 'Procesando datos al servidor...',
+            flags: MessageFlags.Ephemeral
+        });
+
+        const response = await MoneySpentService.postSpendCreate({
+            userId,
+            body: {
+                cardId,
+                name,
+                amount,
+                month,
+                day,
+                hour,
+                minute
+            }
+        });
+        
         if (!response.spend){
             viteLog.debug('Ocurrió un error al procesar los datos con el servidor en la cuenta - Server code: {1}.', userId, response.code);
             await interaction.editReply({
@@ -259,4 +309,5 @@ module.exports = {
     checkMonthlySpendings,
     checkCardOne,
     addSpend,
+    addSpendData
 };

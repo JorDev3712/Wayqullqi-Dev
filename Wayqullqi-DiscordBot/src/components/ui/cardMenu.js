@@ -26,34 +26,23 @@ module.exports = {
             .setCustomId(`OnCardDeleteClick:${cardIds}`)
             .setLabel("❌ Eliminar")
             // .setEmoji('❌')
-            .setStyle(ButtonStyle.Danger),
+            .setStyle(ButtonStyle.Danger)
+    );
+    const builder2 = new ActionRowBuilder();
+    builder2.addComponents(
         new ButtonBuilder()
             .setCustomId(`OnCardMoneySpentClick:${cardIds}`)
-            .setLabel('➕ Agregar gasto rápido')
+            .setLabel('➕ Gasto rápido')
+            // .setEmoji('➕​​')
+            .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+            .setCustomId(`OnCardMoneySpentDataClick:${cardIds}`)
+            .setLabel('➕ Gasto detallado')
             // .setEmoji('➕​​')
             .setStyle(ButtonStyle.Secondary),
     );
-    // const builder2 = new ActionRowBuilder();
-            // builder2.addComponents(
-            //     new ButtonBuilder()
-            //         .setCustomId(`OnCardMoneySpentClick:${cardIds}`)
-            //         .setLabel('Agregar gasto')
-            //         .setEmoji('➕​​')
-            //         .setStyle(ButtonStyle.Success)
-            //     ,
-            //     new ButtonBuilder()
-            //         .setCustomId(`OnCardDashboardClick:${cardIds}`)
-            //         .setLabel('Movimientos')
-            //         .setEmoji('💰​')
-            //         .setStyle(ButtonStyle.Primary)
-            //     ,
-            //     new ButtonBuilder()
-            //         .setCustomId(`OnCardDeleteClick:${cardIds}`)
-            //         .setLabel("Eliminar")
-            //         .setEmoji('❌')
-            //         .setStyle(ButtonStyle.Danger)
-            // );
-    return builder;
+    
+    return [builder, builder2];
   },
 
   createEmbed(card, iconBotUrl) {

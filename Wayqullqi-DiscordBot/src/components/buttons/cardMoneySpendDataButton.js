@@ -1,17 +1,17 @@
 const { MessageFlags } = require('discord.js');
 
 // UI
-const SpendModalForm = require('../ui/spendModalForm');
+const SpendDataForm = require('../ui/spendDataForm');
 
 const SpendController = require('../../controllers/moneySpendController');
 
 module.exports = {
-    customId: 'OnCardMoneySpentClick',
+    customId: 'OnCardMoneySpentDataClick',
     async execute(interaction, args) {
         const [resultCode, card] = await SpendController.checkCardOne(args[0], args[1]);
         switch (resultCode) {
             case 0:
-                const modal = SpendModalForm.create(card.id, card.user_id);
+                const modal = SpendDataForm.create(card.id, card.user_id);
                 await interaction.showModal(modal);
                 break;
                 

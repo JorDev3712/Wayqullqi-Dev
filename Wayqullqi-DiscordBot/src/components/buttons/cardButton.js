@@ -12,7 +12,7 @@ module.exports = {
             await interaction.editReply({
                 content: `🤖 Información obtenida satisfactoriamente.`,
                 embeds: [cardMenu.createEmbed(card, interaction.client.user.displayAvatarURL())],
-                components: [cardMenu.createButtons(card)],
+                components: [...cardMenu.createButtons(card)],
                 flags: MessageFlags.Ephemeral
             });
         }
