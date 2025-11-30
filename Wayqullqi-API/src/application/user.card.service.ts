@@ -46,7 +46,7 @@ export class UserCardService {
         });
     }
 
-    public async update(userId: string, cardId: string, description: string, balance: number, max_amount: number, notice_day: number, notice_hour: number, enable_notice: boolean){
+    public async update(userId: string, cardId: string, description: string, balance: number, max_amount: number, notice_day: number, notice_hour: number, enable_notice: boolean) {
         return await db.user_Card.update({
             where: {
                 id: cardId,
@@ -60,6 +60,17 @@ export class UserCardService {
                 notice_hour,
                 enable_notice,
                 deleted: false
+            }
+        });
+    }
+
+    public async updateDelete(id: string, value: boolean){
+        return await db.user_Card.update({
+            where: {
+                id,
+            },
+            data: {
+                deleted: value
             }
         });
     }

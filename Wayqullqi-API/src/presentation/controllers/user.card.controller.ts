@@ -190,4 +190,49 @@ export class UserCardController {
             return res.status(500).json({message: "Server error @Card->update"});
         }
     }
+
+    public async updateDeleteCard(req: Request, res: Response) {
+            console.log('[UserCardController] invoke method updateDeleteCard()');
+            try {
+                const { cardId, discordId } = req.body;
+    
+                if (!uuidValidate(cardId)){
+                    console.log('[UserCardController] Invalid Card Id: ' + cardId);
+                    return res.status(400).json({ message: "Invalid Card Id" });
+                }
+    
+                // let entity = await this.userService.getClientId(discordId);
+                // if (!entity){
+                //     return res.status(404).json({ message: "User not found" });
+                // }
+    
+                // if (entity.deleted == true){
+                //     console.log('[UserController] User deletion in progress.');
+                //     return res.status(200).json({active: true});
+                // }
+
+                let entity = await this.userCardService.getById(cardId);
+                if (!entity){
+                    console.log('[UserCardController] Card not found.');
+                    return res.status(404).json({ message: "Card not found" });
+                }
+
+                if (entity.deleted == true){
+                    console.log('[UserController] Card deletion in progress.');
+                    return res.status(200).json({active: true});
+                }
+
+                entity = await this.userCardService.updateDelete(cardId, true);
+                if (!entity){
+                    console.log('[UserCardController] Card deletion was not possible.');
+                    return res.status(200).json({result: false});
+                }
+    
+                console.log('[UserCardController] Done');
+                return res.status(200).json({result: true});
+            } catch (error){
+                console.error(error);
+                return res.status(500).json({message: "Server error @Cards->updateDeleteCard"});
+            }
+        }
 }

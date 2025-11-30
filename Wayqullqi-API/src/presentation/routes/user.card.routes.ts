@@ -12,5 +12,6 @@ router.get("/all/:userId", controller.getAll.bind(controller));
 router.get("/user/:userId/:id", controller.getByUserWithId.bind(controller));
 router.post("/create/:userId", controller.create.bind(controller));
 router.put("/update/:userId", controller.update.bind(controller));
+router.put("/update_delete_card", controller.updateDeleteCard.bind(controller));
 
 export default router;

@@ -65,9 +65,26 @@ async function putUpdateCard(dto){
     }
 }
 
+async function putUpdateDeleteCard(dto){
+    viteLog.debug(`putUpdateDeleteCard(${dto.body.cardId}) method invoked`);
+    try{
+        const request = await api.put(dto.url, dto.body);
+        viteLog.log('{0}', request.data);
+        return { code: request.status, message: request.statusMessage, data: request.data };
+    } catch(error){
+        if (error.request.res == undefined){
+            viteLog.error(`Service Unavailable { code: 503 }`);
+            return { code: 503, message: 'Service Unavailable', data: null };
+        }
+        viteLog.error(`${error.message} { code: ${error.status}, message: ${error.request.res.statusMessage} }`);
+        return { code: error.status, message: error.request.res.statusMessage, data: null };
+    }
+}
+
 module.exports = {
     getCards,
     getCardOne,
     postCreate,
-    putUpdateCard
+    putUpdateCard,
+    putUpdateDeleteCard
 };

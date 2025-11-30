@@ -171,9 +171,63 @@ async function update(interaction, cardId, userId, name, minSpend, maxSpend, not
     }
 }
 
+async function updateDeleteCard(interaction, cardId){
+    viteLog.debug('Invoked method updateDeleteCard()');
+    try{
+        const userDc = interaction.user;
+
+        await interaction.reply({
+            content: 'Solicitando petición al servidor...',
+            flags: MessageFlags.Ephemeral
+        });
+
+        const response = await WayVirtualService.putUpdateDeleteCard({
+            url: '/card/update_delete_card',
+            body: {
+                cardId,
+                discordId: userDc.id
+            }
+        });
+
+        if (!response.data){
+            viteLog.debug('Card id {0} no se encuentra en la base de datos.', cardId);
+            await interaction.editReply({
+                content: '👀​ Ups, ocurrió un error al realizar la petición.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [2, false];
+        }
+
+        if (response.data.active == true){
+            await interaction.editReply({
+                content: '🤖​ Ya cuenta con un proceso activo de eliminación.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [3, false];
+        }
+
+        if (response.data.result == false){
+            await interaction.editReply({
+                content: '🤖​ Ups, hubo un error al realizar la petición al servidor. Por favor vuelve a intentar en otro momento.',
+                flags: MessageFlags.Ephemeral
+            });
+            return [4, response.data.result];
+        }
+
+        return [0, response.data.result];
+    } catch (error){
+        await interaction.editReply({
+            content: '❌ No tuve respuesta del servidor...Por favor vuelve a intentar en otro momento.',
+            flags: MessageFlags.Ephemeral
+        });
+        return [1, false];
+    }
+}
+
 module.exports = {
     checkCards,
     checkCardOne,
     create,
-    update
+    update,
+    updateDeleteCard
 };
