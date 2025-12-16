@@ -4,71 +4,75 @@ import { UserCardSpendingService } from "../../application/user.card.spending.se
 
 import { checkOnlyLetters, checkOnlyNumber, checkNumber, checkHourFormat } from "../../utils/util";
 
+import log from "../../utils/logger";
+
 export class UserCardSpendingController {
+    private logger = log.createContext('UserCardSpendingController');
+
     constructor(private readonly userCardSpendingService: UserCardSpendingService) { }
 
     public async getAll(req: Request, res: Response) {
-        console.log('[UserCardSpendingController] getAll() method invoked');
+        this.logger.information('getAll() method invoked');
         try{
             const { userId, cardId } = req.params;
             if (!uuidValidate(userId) || !uuidValidate(cardId)){
-                console.log('[UserCardSpendingController] Invalid user ID and card ID');
+                this.logger.warning('Invalid user ID and card ID');
                 return res.status(400).json({ message: "Invalid user ID and card ID" });
             }
 
             const spendings = await this.userCardSpendingService.getAll(userId, cardId);
 
-            console.log('[UserCardSpendingController] Done!');
+            this.logger.information('Done!');
             return res.status(200).json(spendings);
         } catch(error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Spending"});
         }
     }
 
     public async getDaily(req: Request, res: Response) {
-        console.log('[UserCardSpendingController] getDaily() method invoked');
+        this.logger.information('getDaily() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardSpendingController] Invalid User Id');
+                this.logger.warning('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
             const { cardId, year, month, day } = req.body;
 
             if (!uuidValidate(cardId)){
-                console.log('[UserCardSpendingController] Invalid Card Id');
+                this.logger.warning('Invalid Card Id');
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
             if (!checkNumber(year, 4)){
-                console.log('[UserCardSpendingController] Invalid year');
+                this.logger.warning('Invalid year');
                 return res.status(400).json({ message: "Invalid year: only numbers allowed and less than 4 characters." });
             }
 
             if (year < 2025){
-                console.log('[UserCardSpendingController] Invalid year #2');
+                this.logger.warning('Invalid year #2');
                 return res.status(400).json({ message: "Invalid year: It is less than 2025." });
             }
 
             if (!checkNumber(month, 2)){
-                console.log('[UserCardSpendingController] Invalid month');
+                this.logger.warning('Invalid month');
                 return res.status(400).json({ message: "Invalid month: only numbers allowed and less than 2 characters." });
             }
 
             if (month < 1 || month > 12){
-                console.log('[UserCardSpendingController] Invalid month #2');
+                this.logger.warning('Invalid month #2');
                 return res.status(400).json({ message: "Invalid month." });
             }
 
             if (!checkNumber(day, 2)){
-                console.log('[UserCardSpendingController] Invalid day');
+                this.logger.warning('Invalid day');
                 return res.status(400).json({ message: "Invalid day: only numbers allowed and less than 2 characters." });
             }
 
             if (day < 1 || day > 31){
-                console.log('[UserCardSpendingController] Invalid day #2');
+                this.logger.warning('Invalid day #2');
                 return res.status(400).json({ message: "Invalid day." });
             }
 
@@ -76,57 +80,57 @@ export class UserCardSpendingController {
 
             const spendings = await this.userCardSpendingService.getAllByDate(userId, cardId, `${year}-${month}-${day} 00:00:00`, `${year}-${month}-${day} 23:59:59`);
 
-            console.log('[UserCardSpendingController] Done!');
+            this.logger.information('[UserCardSpendingController] Done!');
             return res.status(200).json(spendings);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Spending->getDaily"});
         }
     }
 
     public async getWeekly(req: Request, res: Response) {
-        console.log('[UserCardSpendingController] getWeekly() method invoked');
+        this.logger.information('getWeekly() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardSpendingController] Invalid User Id');
+                this.logger.warning('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
             const { cardId, year, month, week } = req.body;
 
             if (!uuidValidate(cardId)){
-                console.log('[UserCardSpendingController] Invalid Card Id');
+                this.logger.warning('Invalid Card Id');
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
             if (!checkNumber(year, 4)){
-                console.log('[UserCardSpendingController] Invalid year');
+                this.logger.warning('Invalid year');
                 return res.status(400).json({ message: "Invalid year: only numbers allowed and less than 4 characters." });
             }
 
             if (year < 2025){
-                console.log('[UserCardSpendingController] Invalid year #2');
+                this.logger.warning('Invalid year #2');
                 return res.status(400).json({ message: "Invalid year: It is less than 2025." });
             }
 
             if (!checkNumber(month, 2)){
-                console.log('[UserCardSpendingController] Invalid month');
+                this.logger.warning('Invalid month');
                 return res.status(400).json({ message: "Invalid month: only numbers allowed and less than 2 characters." });
             }
 
             if (month < 1 || month > 12){
-                console.log('[UserCardSpendingController] Invalid month #2');
+                this.logger.warning('Invalid month #2');
                 return res.status(400).json({ message: "Invalid month." });
             }
 
             if (!checkNumber(week, 1)){
-                console.log('[UserCardSpendingController] Invalid week');
+                this.logger.warning('Invalid week');
                 return res.status(400).json({ message: "Invalid week: only numbers allowed and less than 1 character." });
             }
 
             if (week < 1 || week > 5){
-                console.log('[UserCardSpendingController] Invalid week #2');
+                this.logger.warning('Invalid week #2');
                 return res.status(400).json({ message: "Invalid week." });
             }
 
@@ -144,51 +148,51 @@ export class UserCardSpendingController {
             const startDate = new Date(year, month - 1, startDay, 0, 0, 0, 0);
             const endDate = new Date(year, month - 1, safeEndDay, 23, 59, 59, 999);
 
-            console.log(`[UserCardSpendingController] ${startDate.toLocaleString()} - ${endDate.toLocaleString()}`);
+            this.logger.debug(`[UserCardSpendingController] ${startDate.toLocaleString()} - ${endDate.toLocaleString()}`);
 
             const spendings = await this.userCardSpendingService.getAllByDate(userId, cardId, `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()} 00:00:00`, `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()} 23:59:59`);
 
-            console.log('[UserCardSpendingController] Done!');
+            this.logger.information('[UserCardSpendingController] Done!');
             return res.status(200).json(spendings);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Spending->getWeekly"});
         }
     }
 
     public async getMonthly(req: Request, res: Response) {
-        console.log('[UserCardSpendingController] getWeekly() method invoked');
+        this.logger.information('getMonthly() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardSpendingController] Invalid User Id');
+                this.logger.warning('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
             const { cardId, year, month } = req.body;
 
             if (!uuidValidate(cardId)){
-                console.log('[UserCardSpendingController] Invalid Card Id');
+                this.logger.warning('Invalid Card Id');
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
             if (!checkNumber(year, 4)){
-                console.log('[UserCardSpendingController] Invalid year');
+                this.logger.warning('Invalid year');
                 return res.status(400).json({ message: "Invalid year: only numbers allowed and less than 4 characters." });
             }
 
             if (year < 2025){
-                console.log('[UserCardSpendingController] Invalid year #2');
+                this.logger.warning('Invalid year #2');
                 return res.status(400).json({ message: "Invalid year: It is less than 2025." });
             }
 
             if (!checkNumber(month, 2)){
-                console.log('[UserCardSpendingController] Invalid month');
+                this.logger.warning('Invalid month');
                 return res.status(400).json({ message: "Invalid month: only numbers allowed and less than 2 characters." });
             }
 
             if (month < 1 || month > 12){
-                console.log('[UserCardSpendingController] Invalid month #2');
+                this.logger.warning('Invalid month #2');
                 return res.status(400).json({ message: "Invalid month." });
             }
 
@@ -198,64 +202,64 @@ export class UserCardSpendingController {
             // Fecha de fin del mes (último día, 23:59:59)
             const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
-            console.log(`[UserCardSpendingController] ${startDate.toLocaleString()} - ${endDate.toLocaleString()}`);
+            this.logger.debug(`[UserCardSpendingController] ${startDate.toLocaleString()} - ${endDate.toLocaleString()}`);
 
             const spendings = await this.userCardSpendingService.getAllByDate(userId, cardId, `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()} 00:00:00`, `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()} 23:59:59`);
 
-            console.log('[UserCardSpendingController] Done!');
+            this.logger.information('[UserCardSpendingController] Done!');
             return res.status(200).json(spendings);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Spending->getMonthly"});
         }
     }
 
     public async createFast(req: Request, res: Response) {
-        console.log('[UserCardSpendingController] createFast() method invoked');
+        this.logger.information('createFast() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardSpendingController] Invalid User Id');
+                this.logger.warning('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
             const { cardId, name, amount } = req.body;
 
             if (!uuidValidate(cardId)){
-                console.log('[UserCardSpendingController] Invalid Card Id');
+                this.logger.warning('Invalid Card Id');
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
             if (!checkOnlyLetters(name, 30)){
-                console.log('[UserCardSpendingController] Invalid name');
+                this.logger.warning('Invalid name');
                 return res.status(400).json({ message: "Invalid name: only letters allowed and less than 30 characters." });
             }
 
             if (!checkOnlyNumber(amount, 4)){
-                console.log('[UserCardSpendingController] Invalid amount');
+                this.logger.warning('Invalid amount');
                 return res.status(400).json({ message: "Invalid amount: only numbers allowed and less than 4 characters." });
             }
 
             const spending = await this.userCardSpendingService.addFast(uuidv4(),userId, cardId, name, amount);
             if (!spending){
-                console.log('[UserCardSpendingController] The creation of the spending was not possible.');
+                this.logger.warning('The creation of the spending was not possible.');
                 return res.status(404).json({ message: "The creation of the spending was not possible." });
             }
 
-            console.log('[UserCardSpendingController] Done');
+            this.logger.information('Done');
             return res.status(200).json(spending);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Spending->createFast"});
         }
     }
 
     public async create(req: Request, res: Response) {
-        console.log('[UserCardSpendingController] create() method invoked');
+        this.logger.information('create() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardSpendingController] Invalid User Id');
+                this.logger.warning('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
@@ -263,55 +267,57 @@ export class UserCardSpendingController {
             const { cardId, name, amount, month, day, hour, minute } = req.body;
 
             if (!uuidValidate(cardId)){
-                console.log('[UserCardSpendingController] Invalid Card Id');
+                this.logger.warning('Invalid Card Id');
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
             if (!checkOnlyLetters(name, 30)){
-                console.log('[UserCardSpendingController] Invalid name');
+                this.logger.warning('Invalid name');
                 return res.status(400).json({ message: "Invalid name: only letters allowed and less than 30 characters." });
             }
 
             if (!checkOnlyNumber(amount, 4)){
-                console.log('[UserCardSpendingController] Invalid amount');
+                this.logger.warning('Invalid amount');
                 return res.status(400).json({ message: "Invalid amount: only numbers allowed and less than 4 characters." });
             }
 
             if (!checkNumber(month, 2)){
-                console.log('[UserCardSpendingController] Invalid month');
+                this.logger.warning('Invalid month');
                 return res.status(400).json({ message: "Invalid month: only numbers allowed and less than 2 characters." });
             }
 
             if (month < 1 || month > 12){
-                console.log('[UserCardSpendingController] Invalid month #2');
+                this.logger.warning('Invalid month #2');
                 return res.status(400).json({ message: "Invalid month." });
             }
 
             if (!checkNumber(day, 2)){
-                console.log('[UserCardSpendingController] Invalid day');
+                this.logger.warning('Invalid day');
                 return res.status(400).json({ message: "Invalid day: only numbers allowed and less than 2 characters." });
             }
 
             if (day < 1 || day > 31){
-                console.log('[UserCardSpendingController] Invalid day #2');
+                this.logger.warning('Invalid day #2');
                 return res.status(400).json({ message: "Invalid day." });
             }
 
+            this.logger.information(hour + ":" + minute);
+
             if (!checkHourFormat(`${hour}:${minute}`, 5)){
-                console.log('[UserCardSpendingController] Invalid time.');
+                this.logger.warning('Invalid time.');
                 return res.status(400).json({ message: "Invalid time." });
             }
 
             const spending = await this.userCardSpendingService.create(uuidv4(),userId, cardId, name, amount, new Date(now.getFullYear(), month - 1, day, hour, minute, now.getSeconds(), 333));
             if (!spending){
-                console.log('[UserCardSpendingController] The creation of the spending was not possible.');
+                this.logger.warning('The creation of the spending was not possible.');
                 return res.status(404).json({ message: "The creation of the spending was not possible." });
             }
 
-            console.log('[UserCardSpendingController] Done');
+            this.logger.warning('Done');
             return res.status(200).json(spending);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Spending->creation"});
         }
     }

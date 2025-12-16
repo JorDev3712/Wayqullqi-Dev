@@ -4,14 +4,17 @@ import { db } from "./infrastructure/database/db";
 
 dotenv.config();
 
+import log from "./utils/logger";
+// const logger = log.createContext('APP');
+
 const PORT = process.env.API_PORT || 3000;
 
 async function main() {
   try {
     await db.$connect();
-    app.listen(PORT, () => console.log(`🚀 API corriendo en puerto ${PORT}`));
+    app.listen(PORT, () => log.information(`🚀 API corriendo en puerto ${PORT}`));
   } catch (error) {
-    console.error("❌ Error al iniciar:", error);
+    log.error("❌ Error al iniciar: {0}", error);
   }
 }
 

@@ -6,3 +6,4 @@ Wayqullqi-API/prisma/*
 Wayqullqi-API/.env
 Wayqullqi-DiscordBot/.env
 Wayqullqi-DiscordBot/src/logs/*
+Wayqullqi-API/src/logs/*

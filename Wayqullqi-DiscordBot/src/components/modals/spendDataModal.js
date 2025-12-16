@@ -63,7 +63,7 @@ module.exports = {
             return;
         }
 
-        // 
+        // revert time like 09:10 to 9 and 10
         let timeSplit = [];
         if (timeInput === "") {
             const now = new Date();

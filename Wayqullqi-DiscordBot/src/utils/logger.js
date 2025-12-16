@@ -33,7 +33,7 @@ function getTimestamp() {
 
 // 🧾 Escribe logs en archivo por fecha
 function writeToFile(level, message) {
-  const logLine = `[${level}] (${getTimestamp()}) ${message}\n`;
+  const logLine = `(${getTimestamp()}) [${level}] ${message}\n`;
   fs.appendFile(filePath, logLine, err => {
     if (err) console.error('❌ Error escribiendo log:', err);
   });
@@ -47,7 +47,7 @@ class Logger {
 
   information(message, ...objs) {
     const msg = formatMessage(message, ...objs);
-    console.log(chalk.cyan(`[INFO:${this.contextName}] (${getTimestamp()})`), msg);
+    console.log(chalk.cyan(`(${getTimestamp()}) [INFO:${this.contextName}]`), msg);
     writeToFile(`INFO:${this.contextName}`, msg);
   }
 
@@ -60,20 +60,20 @@ class Logger {
   debug(message, ...objs) {
     if (DEBUG_MODE){
         const msg = formatMessage(message, ...objs);
-        console.log(chalk.gray(`[DEBUG:${this.contextName}] (${getTimestamp()})`), msg);
+        console.log(chalk.magenta(`(${getTimestamp()}) [DEBUG:${this.contextName}]`), msg);
         writeToFile(`DEBUG:${this.contextName}`, msg);
     }
   }
 
   warning(message, ...objs) {
     const msg = formatMessage(message, ...objs);
-    console.log(chalk.yellow(`[WARN:${this.contextName}] (${getTimestamp()})`), msg);
+    console.log(chalk.yellow(`(${getTimestamp()}) [WARN:${this.contextName}]`), msg);
     writeToFile(`WARN:${this.contextName}`, msg);
   }
 
   error(message, ...objs) {
     const msg = formatMessage(message, ...objs);
-    console.log(chalk.red(`[ERROR:${this.contextName}] (${getTimestamp()})`), msg);
+    console.log(chalk.red(`(${getTimestamp()}) [ERROR:${this.contextName}]`), msg);
     writeToFile(`ERROR:${this.contextName}`, msg);
   }
 

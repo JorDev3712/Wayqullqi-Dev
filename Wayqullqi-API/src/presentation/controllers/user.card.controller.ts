@@ -4,200 +4,204 @@ import { UserCardService } from "../../application/user.card.service";
 
 import { checkDescriptionLetters, checkOnlyNumber, checkOnlyLetters } from "../../utils/util";
 
+import log from "../../utils/logger";
+
 export class UserCardController {
+    private logger = log.createContext('UserCardController');
+    
     constructor(private readonly userCardService: UserCardService) { }
 
     public async getAll(req: Request, res: Response) {
-        console.log('[UserCardController] getAll() method invoked');
+        this.logger.information('getAll() method invoked');
         try{
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardController] Invalid user ID');
+                this.logger.warning('Invalid user ID');
                 return res.status(400).json({ message: "Invalid user ID" });
             }
 
             const cards = await this.userCardService.getAll(userId);
             if (cards.length < 1){
-                console.log(`[UserCardController] User and Cards not found by ${userId}`);
+                this.logger.warning(`User and Cards not found by ${userId}`);
                 return res.status(404).json({ message: "User and Cards not found" });
             }
 
-            console.log('[UserCardController] Done!');
+            this.logger.information('Done!');
             return res.status(200).json(cards);
         } catch(error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Cards"});
         }
     }
 
     public async getById(req: Request, res: Response) {
-        console.log('[UserCardController] getById() method invoked');
+        this.logger.information('getById() method invoked');
         try{
             const { id } = req.params;
             if (!uuidValidate(id)){
-                console.log('[UserCardController] Invalid ID');
+                this.logger.warning('Invalid ID');
                 return res.status(400).json({ message: "Invalid ID" });
             }
 
             const card = await this.userCardService.getById(id);
             if (!card){
-                console.log(`[UserCardController] Cards not found by ${id}`);
+                this.logger.warning(`Cards not found by ${id}`);
                 return res.status(404).json({ message: "Card not found" });
             }
 
-            console.log('[UserCardController] Done!');
+            this.logger.information('Done!');
             return res.status(200).json(card);
         } catch(error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Card->id"});
         }
     }
 
     public async getByUserWithId(req: Request, res: Response) {
-        console.log('[UserCardController] getByUserWithId() method invoked');
+        this.logger.information('getByUserWithId() method invoked');
         try{
             const { userId, id } = req.params;
             if (!uuidValidate(id) || !uuidValidate(userId)){
-                console.log('[UserCardController] Invalid IDs');
+                this.logger.warning('Invalid IDs');
                 return res.status(400).json({ message: "Invalid IDs" });
             }
 
             const card = await this.userCardService.getByUserWithId(userId, id);
             if (!card){
-                console.log(`[UserCardController] User ${userId} and Card ${id} not found`);
+                this.logger.warning(`User ${userId} and Card ${id} not found`);
                 return res.status(404).json({ message: "User and Card not found" });
             }
 
-            console.log('[UserCardController] Done!');
+            this.logger.information('Done!');
             return res.status(200).json(card);
         } catch(error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Card->user-id"});
         }
     }
 
     public async create(req: Request, res: Response) {
-        console.log('[UserCardController] create() method invoked');
+        this.logger.information('create() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardController] Invalid User Id');
+                this.logger.warning('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
             const { description, balance, maxAmount, noticeDay, noticeHour, enable } = req.body;
 
             if (!checkDescriptionLetters(description, 20)) {
-                console.log('[UserCardController] Invalid Description.');
+                this.logger.warning('Invalid Description.');
                 return res.status(400).json({ message: "Invalid Description" });
             }
 
             if (!checkOnlyNumber(balance, 3)) {
-                console.log('[UserCardController] Invalid Balance.');
+                this.logger.warning('Invalid Balance.');
                 return res.status(400).json({ message: "Invalid Balance" });
             }
 
             if (!checkOnlyNumber(maxAmount, 3)) {
-                console.log('[UserCardController] Invalid Amount.');
+                this.logger.warning('Invalid Amount.');
                 return res.status(400).json({ message: "Invalid Amount" });
             }
 
             if (!checkOnlyNumber(noticeDay, 2)) {
-                console.log('[UserCardController] Invalid Notice by Day.');
+                this.logger.warning('Invalid Notice by Day.');
                 return res.status(400).json({ message: "Notice by Day" });
             }
 
             if (!checkOnlyNumber(noticeHour, 2)) {
-                console.log('[UserCardController] Invalid Notice by Hour.');
+                this.logger.warning('Invalid Notice by Hour.');
                 return res.status(400).json({ message: "Notice by Hour" });
             }
 
             if (!checkOnlyLetters(enable.toString(), 5)) {
-                console.log('[UserCardController] Invalid enable notice.');
+                this.logger.warning('Invalid enable notice.');
                 return res.status(400).json({ message: "Notice enable notice" });
             }
 
             const card = await this.userCardService.create(userId, uuidv4(), description, balance, maxAmount, noticeDay, noticeHour, enable);
             if (!card){
-                console.log('[UserCardController] The creation of the card was not possible.');
+                this.logger.warning('The creation of the card was not possible.');
                 return res.status(404).json({ message: "The creation of the card was not possible." });
             }
 
-            console.log('[UserCardController] Done');
+            this.logger.information('Done');
             return res.status(200).json(card);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Card->creation"});
         }
     }
 
     public async update(req: Request, res: Response) {
-        console.log('[UserCardController] update() method invoked');
+        this.logger.information('update() method invoked');
         try {
             const { userId } = req.params;
             if (!uuidValidate(userId)){
-                console.log('[UserCardController] Invalid User Id');
+                this.logger.information('Invalid User Id');
                 return res.status(400).json({ message: "Invalid User Id" });
             }
 
             const { cardId, description, balance, maxAmount, noticeDay, noticeHour, enable } = req.body;
 
             if (!uuidValidate(cardId)){
-                console.log('[UserCardController] Invalid Card Id');
+                this.logger.warning('Invalid Card Id');
                 return res.status(400).json({ message: "Invalid Card Id" });
             }
 
             if (!checkDescriptionLetters(description, 20)) {
-                console.log('[UserCardController] Invalid Description.');
+                this.logger.warning('Invalid Description.');
                 return res.status(400).json({ message: "Invalid Description" });
             }
 
             if (!checkOnlyNumber(balance, 3)) {
-                console.log('[UserCardController] Invalid Balance.');
+                this.logger.warning('Invalid Balance.');
                 return res.status(400).json({ message: "Invalid Balance" });
             }
 
             if (!checkOnlyNumber(maxAmount, 3)) {
-                console.log('[UserCardController] Invalid Amount.');
+                this.logger.warning('Invalid Amount.');
                 return res.status(400).json({ message: "Invalid Amount" });
             }
 
             if (!checkOnlyNumber(noticeDay, 2)) {
-                console.log('[UserCardController] Invalid Notice by Day.');
+                this.logger.warning('Invalid Notice by Day.');
                 return res.status(400).json({ message: "Notice by Day" });
             }
 
             if (!checkOnlyNumber(noticeHour, 2)) {
-                console.log('[UserCardController] Invalid Notice by Hour.');
+                this.logger.warning('Invalid Notice by Hour.');
                 return res.status(400).json({ message: "Notice by Hour" });
             }
 
             if (!checkOnlyLetters(enable.toString(), 5)) {
-                console.log('[UserCardController] Invalid enable notice.');
+                this.logger.warning('Invalid enable notice.');
                 return res.status(400).json({ message: "Notice enable notice" });
             }
 
             const card = await this.userCardService.update(userId, cardId, description, balance, maxAmount, noticeDay, noticeHour, enable);
             if (!card){
-                console.log('[UserCardController] The updating of the card was not possible.');
+                this.logger.warning('The updating of the card was not possible.');
                 return res.status(404).json({ message: "The updating of the card was not possible." });
             }
 
-            console.log('[UserCardController] Done');
+            this.logger.information('Done');
             return res.status(200).json(card);
         } catch (error){
-            console.error(error);
+            this.logger.error("Error: {0}", error);
             return res.status(500).json({message: "Server error @Card->update"});
         }
     }
 
     public async updateDeleteCard(req: Request, res: Response) {
-            console.log('[UserCardController] invoke method updateDeleteCard()');
+            this.logger.information('invoke method updateDeleteCard()');
             try {
                 const { cardId, discordId } = req.body;
     
                 if (!uuidValidate(cardId)){
-                    console.log('[UserCardController] Invalid Card Id: ' + cardId);
+                    this.logger.warning('Invalid Card Id: ' + cardId);
                     return res.status(400).json({ message: "Invalid Card Id" });
                 }
     
@@ -213,25 +217,25 @@ export class UserCardController {
 
                 let entity = await this.userCardService.getById(cardId);
                 if (!entity){
-                    console.log('[UserCardController] Card not found.');
+                    this.logger.warning('Card not found.');
                     return res.status(404).json({ message: "Card not found" });
                 }
 
                 if (entity.deleted == true){
-                    console.log('[UserController] Card deletion in progress.');
+                    this.logger.warning('Card deletion in progress.');
                     return res.status(200).json({active: true});
                 }
 
                 entity = await this.userCardService.updateDelete(cardId, true);
                 if (!entity){
-                    console.log('[UserCardController] Card deletion was not possible.');
+                    this.logger.warning('Card deletion was not possible.');
                     return res.status(200).json({result: false});
                 }
     
-                console.log('[UserCardController] Done');
+                this.logger.information('Done');
                 return res.status(200).json({result: true});
             } catch (error){
-                console.error(error);
+                this.logger.error("Error: {0}", error);
                 return res.status(500).json({message: "Server error @Cards->updateDeleteCard"});
             }
         }
